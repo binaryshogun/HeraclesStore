@@ -6,7 +6,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<CatalogContext>(options => 
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb"),
+        sqlServerOptions => 
+        {
+            sqlServerOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
+        });
 });
 
 var app = builder.Build();
