@@ -4,6 +4,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<CatalogContext>(options => 
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb"));
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
