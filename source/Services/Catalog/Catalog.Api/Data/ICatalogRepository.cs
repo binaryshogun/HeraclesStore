@@ -5,17 +5,13 @@ namespace Catalog.Api.Data
     /// </summary>
     public interface ICatalogRepository
     {
-        Task<IEnumerable<CatalogItem>> GetAllItemsAsync();
-        Task<IEnumerable<CatalogItem>> GetItemsByBrandAsync(int catalogBrandId);
-        Task<IEnumerable<CatalogItem>> GetItemsByTypeAsync(int catalogTypeId);
-        Task<IEnumerable<CatalogItem>> GetItemsByTypeAndBrandAsync(int catalogTypeId, int catalogBrandId);
+        Task<IEnumerable<CatalogItem>> GetItemsAsync(int? catalogBrandId = null, int? catalogTypeId = null, string? name = null);
+        Task<IEnumerable<CatalogBrand>> GetAllBrandsAsync();
+        Task<IEnumerable<CatalogType>> GetAllTypesAsync();
 
         Task<CatalogItem?> GetItemByIdAsync(int itemId);
         CatalogItem CreateItem(CatalogItem item);
         bool UpdateItem(int itemId, CatalogItem item);
         void DeleteItem(int itemId);
-
-        Task<IEnumerable<CatalogBrand>> GetAllBrandsAsync();
-        Task<IEnumerable<CatalogType>> GetAllTypesAsync();
     }
 }
