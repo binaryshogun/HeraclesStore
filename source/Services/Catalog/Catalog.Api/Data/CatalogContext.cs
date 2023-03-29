@@ -2,14 +2,12 @@ namespace Catalog.Api.Data
 {
     public class CatalogContext : DbContext
     {
-        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
-        {
+        public CatalogContext(DbContextOptions<CatalogContext> options)
+            : base(options) { }
 
-        }
-
-        public DbSet<CatalogItem> CatalogItems { get; set; } = null!;
-        public DbSet<CatalogBrand> CatalogBrands { get; set; } = null!;
-        public DbSet<CatalogType> CatalogTypes { get; set; } = null!;
+        public DbSet<CatalogItem> CatalogItems { get; set; } = default!;
+        public DbSet<CatalogBrand> CatalogBrands { get; set; } = default!;
+        public DbSet<CatalogType> CatalogTypes { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
