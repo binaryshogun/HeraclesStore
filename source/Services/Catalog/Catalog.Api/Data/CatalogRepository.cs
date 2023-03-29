@@ -12,9 +12,13 @@ namespace Catalog.Api.Data
             this.context = context;
         }
 
-        public async Task<IEnumerable<CatalogItem>> GetAllItemsAsync()
+        public async Task<IEnumerable<CatalogItem>> GetItemsAsync(int? catalogBrandId = null, int? catalogTypeId = null, string? name = null)
         {
-            return await context.CatalogItems.ToListAsync();
+            return await context.CatalogItems
+                .FilterByBrand(catalogBrandId)
+                .FilterByType(catalogTypeId)
+                .FilterByName(name)
+                .ToListAsync();
         }
 
         public async Task<CatalogItem?> GetItemByIdAsync(int itemId)
@@ -56,27 +60,6 @@ namespace Catalog.Api.Data
         public async Task<IEnumerable<CatalogType>> GetAllTypesAsync()
         {
             return await context.CatalogTypes.ToListAsync();
-        }
-
-        public async Task<IEnumerable<CatalogItem>> GetItemsByBrandAsync(int catalogBrandId)
-        {
-            return await context.CatalogItems
-                .Where(ci => ci.CatalogBrandId == catalogBrandId)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<CatalogItem>> GetItemsByTypeAsync(int catalogTypeId)
-        {
-            return await context.CatalogItems
-                .Where(ci => ci.CatalogTypeId == catalogTypeId)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<CatalogItem>> GetItemsByTypeAndBrandAsync(int catalogTypeId, int catalogBrandId)
-        {
-            return await context.CatalogItems
-                .Where(ci => ci.CatalogBrandId == catalogBrandId && ci.CatalogTypeId == catalogTypeId)
-                .ToListAsync();
         }
     }
 }
