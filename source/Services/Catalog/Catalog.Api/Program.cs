@@ -1,26 +1,30 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services
+    .AddCustomMVC()
+    .AddEndpointsApiExplorer()
+    .AddCustomDbContext(builder.Configuration)
+    .AddCustomConfiguration()
+    .AddSwaggerGen()
+    .AddCustomHealthCheck(builder.Configuration);
 
-// Set up serilog as logging provider
-builder.Host.UseSerilog((hostContext, services, configuration) => 
-{
-    configuration.WriteTo.Console();
-    configuration.WriteTo.File($"Logs\\log.txt", rollingInterval: RollingInterval.Hour, retainedFileCountLimit: null);
-    configuration.ReadFrom.Configuration(builder.Configuration);
-});
+builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
+builder.Environment.WebRootPath = "Pictures";
 
-// Inject DbContext to the services container
-builder.Services.AddDbContext<CatalogContext>(options => 
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb"),
-        sqlServerOptions => 
-        {
-            sqlServerOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
-        });
-});
+// Configuring Serilog logger
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("../../../Logs/catalog-api-.txt", rollingInterval: RollingInterval.Hour)
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+// Using Serilog as logging provider
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+
+builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
 
 var app = builder.Build();
 
@@ -30,18 +34,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+app.MapHealthChecks("/liveness", new HealthCheckOptions()
+{
+    Predicate = r => r.Name.Contains("self")
+});
 
-await new SeedData().EnsurePopulated(app);
+await SeedData.EnsurePopulated(app);
 
-app.Logger.LogInformation($"Starting web application {app.Environment.ApplicationName}...");
-
-await app.StartAsync();
-
-app.Logger.LogInformation($"Now listening on: \n\t\t{string.Join("\n\t\t", app.Urls)}");
-
-await app.WaitForShutdownAsync();
+app.Run();
