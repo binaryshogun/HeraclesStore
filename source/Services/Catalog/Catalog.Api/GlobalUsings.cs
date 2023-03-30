@@ -3,13 +3,17 @@ global using Polly.Retry;
 
 global using Serilog;
 
+global using AutoMapper;
+
 global using System.IO;
+global using System.ComponentModel.DataAnnotations;
 
 global using Catalog.Api;
 global using Catalog.Api.Filters;
 global using Catalog.Api.Exceptions;
 global using Catalog.Api.Models;
 global using Catalog.Api.Data;
+global using Catalog.Api.Data.Dtos;
 global using Catalog.Api.Data.EntityConfigurations;
 
 global using Microsoft.Data.SqlClient;
