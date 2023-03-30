@@ -26,7 +26,7 @@ namespace Catalog.Api.Data.EntityConfigurations
                 .HasPrecision(8, 2);
 
             builder.Property(ci => ci.PictureFileName)
-                .IsRequired(true);
+                .IsRequired(false);
 
             builder.Ignore(ci => ci.PictureUri);
 
