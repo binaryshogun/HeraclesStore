@@ -13,5 +13,8 @@ namespace Catalog.Api.Data
         CatalogItem CreateItem(CatalogItem item);
         bool UpdateItem(int itemId, CatalogItem item);
         void DeleteItem(int itemId);
+
+        bool SaveChanges();
+        Task<bool> SaveChangesAsync();
     }
 }
