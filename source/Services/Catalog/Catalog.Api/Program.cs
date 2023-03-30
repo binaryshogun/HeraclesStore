@@ -6,7 +6,8 @@ builder.Services
     .AddCustomDbContext(builder.Configuration)
     .AddCustomConfiguration()
     .AddSwaggerGen()
-    .AddCustomHealthCheck(builder.Configuration);
+    .AddCustomHealthCheck(builder.Configuration)
+    .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
 builder.Environment.WebRootPath = "Pictures";
