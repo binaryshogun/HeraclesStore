@@ -61,5 +61,15 @@ namespace Catalog.Api.Data
         {
             return await context.CatalogTypes.ToListAsync();
         }
+
+        public bool SaveChanges()
+        {
+            return context.SaveChanges() > 0;
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await context.SaveChangesAsync() > 0;
+        }
     }
 }
