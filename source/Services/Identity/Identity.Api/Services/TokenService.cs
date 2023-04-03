@@ -15,10 +15,14 @@ namespace Identity.Api.Services
 
         public string CreateToken(IdentityUser user)
         {
+            logger.LogInformation("[IdentityApi] ---> Generating JWT token...");
+
             var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
 
             var token = BuildToken(CreateClaims(user), CreateSigningCredentials(), expiration);
             var tokenHandler = new JwtSecurityTokenHandler();
+
+            logger.LogInformation("[IdentityApi] ---> Token successfully generated");
 
             return tokenHandler.WriteToken(token);
         }
@@ -52,7 +56,7 @@ namespace Identity.Api.Services
             }
             catch (Exception ex)
             {
-                logger.LogInformation("---> Exception occurred during JWT token generation: {exception} - {message}", ex, ex.Message);
+                logger.LogInformation("[IdentityApi] ---> Exception occurred during JWT token generation: {exception} - {message}", ex, ex.Message);
             }
 
             return null;
