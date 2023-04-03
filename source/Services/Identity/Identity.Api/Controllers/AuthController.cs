@@ -23,7 +23,7 @@ namespace Identity.Api.Controllers
 
         [HttpPost("register")]
         [ProducesResponseType(typeof(SignUpResponse), StatusCodes.Status201Created, "application/json")]
-        public async Task<ActionResult> Register(SignUpRequest request)
+        public async Task<ActionResult> SignUp(SignUpRequest request)
         {
             var result = await userManager.CreateAsync(
                 new IdentityUser { UserName = request.Username, Email = request.Email },
@@ -35,13 +35,13 @@ namespace Identity.Api.Controllers
                 throw new IdentityException(string.Join(';', result.Errors));
             }
 
-            return CreatedAtAction(nameof(Register), new { email = request.Email }, new SignUpResponse { Username = request.Username!, Email = request.Email! });
+            return CreatedAtAction(nameof(SignUp), new SignUpResponse { Username = request.Username!, Email = request.Email! });
         }
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(SignInResponse), StatusCodes.Status200OK, "application/json")]
         [ProducesResponseType(typeof(UnauthorizedObjectResult), StatusCodes.Status401Unauthorized, "application/json")]
-        public async Task<ActionResult<SignInResponse>> Login(SignInRequest request)
+        public async Task<ActionResult<SignInResponse>> SignIn(SignInRequest request)
         {
             var user = await userManager.FindByEmailAsync(request.Email!);
 
