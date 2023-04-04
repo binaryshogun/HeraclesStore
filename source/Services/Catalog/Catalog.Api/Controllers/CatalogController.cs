@@ -84,8 +84,10 @@ namespace Catalog.Api.Controllers
             return await repository.GetAllBrandsAsync();
         }
 
+        [Authorize]
         [HttpPost("items")]
         [ProducesResponseType(typeof(CatalogItemReadDto), StatusCodes.Status201Created, "application/json")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult CreateCatalogItem(CatalogItemCreateDto catalogItemCreateDto)
         {
             var item = mapper.Map<CatalogItem>(catalogItemCreateDto);
@@ -98,6 +100,7 @@ namespace Catalog.Api.Controllers
             return CreatedAtAction(nameof(GetItemByIdAsync), new { Id = catalogItemReadDto.Id }, catalogItemReadDto);
         }
 
+        [Authorize]
         [HttpPut("items")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -126,6 +129,7 @@ namespace Catalog.Api.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("items/{catalogItemId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
