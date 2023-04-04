@@ -32,7 +32,7 @@ namespace Identity.Api.Controllers
 
             if (!result.Succeeded)
             {
-                throw new IdentityException(string.Join(';', result.Errors));
+                throw new IdentityException(string.Join(';', result.Errors.Select(e => e.Description)));
             }
 
             return CreatedAtAction(nameof(SignUp), new SignUpResponse { Username = request.Username!, Email = request.Email! });
