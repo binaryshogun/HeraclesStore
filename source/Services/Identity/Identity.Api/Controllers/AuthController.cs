@@ -21,7 +21,7 @@ namespace Identity.Api.Controllers
             this.logger = logger;
         }
 
-        [HttpPost("register")]
+        [HttpPost("signup")]
         [ProducesResponseType(typeof(SignUpResponse), StatusCodes.Status201Created, "application/json")]
         public async Task<ActionResult> SignUp(SignUpRequest request)
         {
@@ -38,7 +38,7 @@ namespace Identity.Api.Controllers
             return CreatedAtAction(nameof(SignUp), new SignUpResponse { Username = request.Username!, Email = request.Email! });
         }
 
-        [HttpPost("login")]
+        [HttpPost("signin")]
         [ProducesResponseType(typeof(SignInResponse), StatusCodes.Status200OK, "application/json")]
         [ProducesResponseType(typeof(UnauthorizedObjectResult), StatusCodes.Status401Unauthorized, "application/json")]
         public async Task<ActionResult<SignInResponse>> SignIn(SignInRequest request)
