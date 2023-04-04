@@ -5,7 +5,8 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddCustomDbContext(builder.Configuration)
     .AddCustomConfiguration()
-    .AddSwaggerGen()
+    .AddCustomAuthentication(builder.Configuration)
+    .AddCustomSwaggerGen()
     .AddCustomHealthCheck(builder.Configuration)
     .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -36,6 +37,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
