@@ -25,6 +25,11 @@ namespace Catalog.Api.Data.EntityConfigurations
                 .IsRequired(true)
                 .HasPrecision(8, 2);
 
+            builder.Property(ci => ci.Discount)
+                .IsRequired(true)
+                .HasPrecision(2, 0)
+                .HasDefaultValue<decimal>(0);
+
             builder.Property(ci => ci.PictureFileName)
                 .IsRequired(false);
 
