@@ -17,7 +17,12 @@ namespace Catalog.Api.Data.Dtos
 
         [Required]
         [Precision(8, 2)]
+        [Range(1, 1000000)]
         public decimal Price { get; init; }
+        [Required]
+        [Range(0, 99)]
+        [Precision(2, 0)]
+        public decimal Discount { get; set; }
         public string? PictureFileName { get; init; }
 
         [Required]

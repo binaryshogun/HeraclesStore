@@ -99,6 +99,11 @@ namespace Catalog.Api
             return services;
         }
 
+        /// <summary>
+        /// Adds Swagger Gen and Open API definitions to the application's services.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomSwaggerGen(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -137,6 +142,12 @@ namespace Catalog.Api
             return services;
         }
 
+        /// <summary>
+        /// Adds authentication with JWT bearer tokens to the application's services.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <param name="configuration">Application's configuration.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services
