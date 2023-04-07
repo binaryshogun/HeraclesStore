@@ -1,7 +1,15 @@
 namespace Identity.Api
 {
+    /// <summary>
+    /// Extensions class that contains static methods to set up application's service collection.
+    /// </summary>
     public static class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds exception filter to controllers and sets up CORS policy for application.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomMVC(this IServiceCollection services)
         {
             services.AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)));
@@ -20,6 +28,12 @@ namespace Identity.Api
             return services;
         }
 
+        /// <summary>
+        /// Setting up <see cref="DbContext" /> for <paramref name="services" />.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <param name="configuration">Application's configuration.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<UsersContext>(options =>
@@ -31,6 +45,11 @@ namespace Identity.Api
             return services;
         }
 
+        /// <summary>
+        /// Setting up <see cref="ApiBehaviorOptions" /> to react on invalid model state.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomConfiguration(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
@@ -54,6 +73,12 @@ namespace Identity.Api
             return services;
         }
 
+        /// <summary>
+        /// Adds health checks for application, databases and other application's services.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <param name="configuration">Application's configuration.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var healthCheckBuilder = services.AddHealthChecks();
@@ -69,6 +94,11 @@ namespace Identity.Api
             return services;
         }
 
+        /// <summary>
+        /// Setting up identity core for application's services.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
         {
             services.AddIdentityCore<IdentityUser>(options =>
