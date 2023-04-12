@@ -24,7 +24,7 @@ namespace Ordering.Domain.Models.OrderAggregate
         /// <param name="discount">Discount value.</param>
         /// <param name="pictureUrl">Url of product picture.</param>
         /// <param name="units">Number of units.</param>
-        public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, string pictureUrl, int units = 1)
+        public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, string? pictureUrl = null, int units = 1)
         {
             CheckDiscountValue(unitPrice, discount, units);
 
