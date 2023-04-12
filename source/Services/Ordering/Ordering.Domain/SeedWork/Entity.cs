@@ -1,40 +1,62 @@
 namespace Ordering.Domain.SeedWork
 {
+    /// <summary>
+    /// Abstract class representing entity object.
+    /// </summary>
     public abstract class Entity
     {
         private int id;
         private List<INotification>? domainEvents;
 
-        public int Id
+        public virtual int Id
         {
             get => id;
-            set => id = value;
+            protected set => id = value;
         }
 
+        /// <summary>
+        /// Read only collection of domain events.
+        /// </summary>
+        /// <returns><see cref="IReadOnlyCollection{INotification}" /> of domain events.</returns>
         public IReadOnlyCollection<INotification>? DomainEvents => domainEvents?.AsReadOnly();
 
-
+        /// <summary>
+        /// Adds domain event to <see cref="DomainEvents" /> collection.
+        /// </summary>
+        /// <param name="eventItem">Event that need to be added to collection of domain events.</param>
         public void AddDomainEvent(INotification eventItem)
         {
             domainEvents = domainEvents ?? new List<INotification>();
             domainEvents.Add(eventItem);
         }
 
+        /// <summary>
+        /// Removes domain event from <see cref="DomainEvents" /> collection.
+        /// </summary>
+        /// <param name="eventItem">Event that need to be removed from collection of domain events.</param>
         public void RemoveDomainEvent(INotification eventItem)
         {
             domainEvents?.Remove(eventItem);
         }
 
+        /// <summary>
+        /// Clears all domain events.
+        /// </summary>
         public void ClearDomainEvents()
         {
             domainEvents?.Clear();
         }
 
+        /// <summary>
+        /// Specifies whether the entity is transient or not.
+        /// </summary>
+        /// <returns><see langword="true" /> if entity is transient; otherwise - <see langword="false" />.</returns>
         public bool IsTransient()
         {
             return this.Id == default(Int32);
         }
 
+        /// <inheritdoc cref="object.Equals(object?)" />
         public override bool Equals(object? obj)
         {
             if (obj is null || obj is not Entity)
@@ -54,6 +76,7 @@ namespace Ordering.Domain.SeedWork
                 return item.Id == this.Id;
         }
 
+        /// <inheritdoc cref="object.GetHashCode" />
         public override int GetHashCode()
         {
             if (!IsTransient())
@@ -64,6 +87,7 @@ namespace Ordering.Domain.SeedWork
                 return base.GetHashCode();
 
         }
+
         public static bool operator ==(Entity left, Entity right)
         {
             if (Object.Equals(left, null))
