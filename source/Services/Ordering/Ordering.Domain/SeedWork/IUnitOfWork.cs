@@ -19,12 +19,6 @@ namespace Ordering.Domain.SeedWork
         Task<int> SaveChangesAsync(CancellationToken token = default);
 
         /// <summary>
-        /// Saves all entities.
-        /// </summary>
-        /// <returns><see langword="true" /> if any entity was saved; otherwise - <see langword="false" />.</returns>
-        bool SaveEntities();
-
-        /// <summary>
         /// Asynchronously saves all entities.
         /// </summary>
         /// <returns><see cref="Task" /> that represents asynchronous operation and contains <see langword="true" /> if any entity was saved, otherwise - <see langword="false" />.</returns>
