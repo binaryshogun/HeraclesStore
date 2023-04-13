@@ -30,6 +30,6 @@ namespace Ordering.Domain.Models.OrderAggregate
         /// <param name="order"><see cref="Order" /> instance that should be updated.</param>
         /// <returns><see langword="true" /> if <paramref name="order" /> was successfully 
         /// updated; otherwise - <see langword="false" />.</returns>
-        bool Update(Order order);
+        Order Update(Order order);
     }
 }

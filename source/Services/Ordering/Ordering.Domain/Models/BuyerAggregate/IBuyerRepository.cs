@@ -48,6 +48,6 @@ namespace Ordering.Domain.Models.BuyerAggregate
         /// <param name="buyer"><see cref="Buyer" /> instance that should be updated.</param>
         /// <returns><see langword="true" /> if <paramref name="buyer" /> was successfully 
         /// updated; otherwise - <see langword="false" />.</returns>
-        bool Update(Buyer buyer);
+        Buyer Update(Buyer buyer);
     }
 }
