@@ -1,5 +1,8 @@
 namespace Ordering.Domain.Models.OrderAggregate
 {
+    /// <summary>
+    /// Repository contract for <see cref="Order" /> entity.
+    /// </summary>
     public interface IOrderRepository : IRepository<Order>
     {
         /// <summary>
