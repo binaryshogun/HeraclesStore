@@ -49,12 +49,12 @@ namespace Ordering.Domain.Models.OrderAggregate
         public int? BuyerId
         {
             get => buyerId;
-            private set => buyerId = value;
+            set => buyerId = value;
         }
         public int? PaymentMethodId
         {
             get => paymentMethodId;
-            private set => paymentMethodId = value;
+            set => paymentMethodId = value;
         }
 
         public Address Address { get; private set; } = default!;
