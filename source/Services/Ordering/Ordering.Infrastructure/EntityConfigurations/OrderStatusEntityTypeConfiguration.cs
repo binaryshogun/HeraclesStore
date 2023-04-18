@@ -8,7 +8,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
 
             builder.HasKey(o => o.Id);
 
-            builder.Property(o => o.Id).HasDefaultValue(1).ValueGeneratedNever();
+            builder.Property(o => o.Id).ValueGeneratedNever();
             builder.Property(o => o.Name).HasMaxLength(200).IsRequired(true);
         }
     }

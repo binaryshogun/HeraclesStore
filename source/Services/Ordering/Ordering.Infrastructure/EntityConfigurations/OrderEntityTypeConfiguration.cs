@@ -15,6 +15,11 @@ namespace Ordering.Infrastructure.EntityConfigurations
                 .HasColumnName("OrderDate")
                 .IsRequired(true);
 
+            builder.Property<string?>("description")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("Description")
+                .IsRequired(true);
+
             builder.Property<int>("orderStatusId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("OrderStatusId")
@@ -30,7 +35,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
                 .HasColumnName("PaymentMethodId")
                 .IsRequired(false);
 
-            builder.Property(x => x.OrderItems).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Navigation(x => x.OrderItems).UsePropertyAccessMode(PropertyAccessMode.Field);
 
             builder.Ignore(x => x.DomainEvents);
 

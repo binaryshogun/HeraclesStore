@@ -15,7 +15,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
             builder.Property(x => x.IdentityId).HasMaxLength(1000).IsRequired(true);
             builder.Property(x => x.Name).IsRequired(true);
 
-            builder.Property(x => x.PaymentMethods).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Navigation(x => x.PaymentMethods).UsePropertyAccessMode(PropertyAccessMode.Field);
 
             builder.HasMany(x => x.PaymentMethods)
                 .WithOne()

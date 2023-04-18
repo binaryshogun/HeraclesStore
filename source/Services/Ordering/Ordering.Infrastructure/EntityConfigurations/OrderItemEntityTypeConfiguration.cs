@@ -20,6 +20,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
 
             builder.Property(x => x.UnitPrice)
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasPrecision(8, 2)
                 .HasColumnName("UnitPrice")
                 .IsRequired(true);
 
