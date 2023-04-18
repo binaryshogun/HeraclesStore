@@ -2,34 +2,40 @@ namespace Ordering.Api.Infrastructure
 {
     public class OrderingContextSeed
     {
-        public static async Task SeedAsync(OrderingContext context, ILogger<OrderingContextSeed> logger)
+        public static async Task SeedAsync(WebApplication app)
         {
-            var policy = CreatePolicy(logger);
-
-            await policy.ExecuteAsync(async () =>
+            using (var scope = app.Services.CreateScope())
             {
-                using (context)
+                var context = scope.ServiceProvider.GetRequiredService<OrderingContext>();
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<OrderingContextSeed>>();
+
+                var policy = CreatePolicy(logger);
+
+                await policy.ExecuteAsync(async () =>
                 {
-                    if (context.Database.GetPendingMigrations().Any())
+                    using (context)
                     {
-                        context.Database.Migrate();
+                        if (context.Database.GetPendingMigrations().Any())
+                        {
+                            context.Database.Migrate();
+                        }
+
+                        if (!context.CardTypes.Any())
+                        {
+                            context.CardTypes.AddRange(GetPredefinedCardTypes());
+
+                            await context.SaveChangesAsync();
+                        }
+
+                        if (!context.OrderStatus.Any())
+                        {
+                            context.OrderStatus.AddRange(GetPredefinedOrderStatus());
+
+                            await context.SaveChangesAsync();
+                        }
                     }
-
-                    if (!context.CardTypes.Any())
-                    {
-                        context.CardTypes.AddRange(GetPredefinedCardTypes());
-
-                        await context.SaveChangesAsync();
-                    }
-
-                    if (!context.OrderStatus.Any())
-                    {
-                        context.OrderStatus.AddRange(GetPredefinedOrderStatus());
-
-                        await context.SaveChangesAsync();
-                    }
-                }
-            });
+                });
+            }
         }
 
         private static IEnumerable<CardType> GetPredefinedCardTypes()
