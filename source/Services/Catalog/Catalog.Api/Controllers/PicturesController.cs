@@ -42,6 +42,59 @@ namespace Catalog.Api.Controllers
             return File(content, mimetype);
         }
 
+        [HttpPost("{catalogItemId:int}/picture")]
+        [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK, "application/json")]
+        [ProducesResponseType(typeof(BadRequestResult), StatusCodes.Status400BadRequest, "application/json")]
+        [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound, "application/json")]
+        public async Task<ActionResult> CreateImageAsync(int catalogItemId, IFormFile file)
+        {
+            var item = await repository.GetItemByIdAsync(catalogItemId);
+
+            if (item is null)
+            {
+                return NotFound();
+            }
+
+            var extension = Path.GetExtension(file.FileName);
+
+            if (file.Length == 0 || !IsImage(extension))
+            {
+                return BadRequest();
+            }
+
+            string fileName = file.FileName;
+            string webRoot = environment.WebRootPath;
+
+            string path = Path.Combine(webRoot, fileName);
+
+            if (Path.Exists(path))
+            {
+                fileName = $"new-{file.FileName}";
+                path = Path.Combine(webRoot, fileName);
+            }
+
+            using (Stream fileStream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            item.PictureFileName = fileName;
+
+            repository.UpdateItem(item.Id, item);
+            await repository.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        private bool IsImage(string? extension)
+        {
+            return extension switch
+            {
+                ".jpg" or ".jpeg" or ".png" => true,
+                _ => false
+            };
+        }
+
         /// <summary>
         /// Gets content type for the given image <paramref name="extension" />.
         /// </summary>
