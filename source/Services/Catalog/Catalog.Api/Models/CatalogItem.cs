@@ -87,6 +87,11 @@ namespace Catalog.Api.Models
         {
             int original = AvailableInStock;
 
+            if (quantity <= 0)
+            {
+                throw new CatalogDomainException("Quantity should be greater than zero");
+            }
+
             // Client is trying to add to stock quantity that is greater than could be phisically acommodated in the warehouse
             if ((AvailableInStock + quantity) > MaxStockThreshold)
             {
