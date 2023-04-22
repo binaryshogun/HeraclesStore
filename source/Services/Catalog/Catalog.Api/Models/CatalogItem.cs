@@ -116,7 +116,7 @@ namespace Catalog.Api.Models
         /// <param name="pictureBaseUrl">Base path to folder that contains product picture.</param>
         public void FillPicturePath(string pictureBaseUrl)
         {
-            if (this is not null)
+            if (this is not null && PictureFileName is not null)
             {
                 PictureUri = pictureBaseUrl + PictureFileName;
             }
