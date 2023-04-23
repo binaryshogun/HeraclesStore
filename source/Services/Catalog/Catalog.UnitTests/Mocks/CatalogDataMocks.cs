@@ -11,8 +11,8 @@ namespace Catalog.UnitTests.Mocks
 
             repository
                 .Setup(r => r.GetItemsAsync(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>()))
-                .Returns((int? catalogBrandId, int? catalogTypeId, string name)
-                    => Task.FromResult(items
+                .Returns((int? catalogBrandId, int? catalogTypeId, string name) =>
+                    Task.FromResult(items
                         .AsQueryable()
                         .FilterByBrand(catalogBrandId)
                         .FilterByType(catalogTypeId)
