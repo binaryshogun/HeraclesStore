@@ -14,7 +14,7 @@ namespace Catalog.Api.Data
 
         public static IQueryable<CatalogItem> FilterByName(this IQueryable<CatalogItem> items, string? name)
         {
-            return name is null ? items : items.Where(i => i.Name != null && i.Name.StartsWith(name));
+            return name is null ? items : items.Where(i => i.Name != null && i.Name.ToLower().Contains(name.ToLower()));
         }
     }
 }
