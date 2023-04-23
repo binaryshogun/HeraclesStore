@@ -12,3 +12,4 @@ global using Catalog.Api.Data.Dtos;
 global using Catalog.UnitTests.Mocks;
 
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Hosting;
