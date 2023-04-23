@@ -16,7 +16,8 @@ namespace Catalog.UnitTests.Mocks
                         .AsQueryable()
                         .FilterByBrand(catalogBrandId)
                         .FilterByType(catalogTypeId)
-                        .FilterByName(name)));
+                        .FilterByName(name)
+                        .AsEnumerable()));
 
             repository.Setup(r => r.GetAllBrandsAsync()).Returns(Task.FromResult(brands.AsEnumerable()));
             repository.Setup(r => r.GetAllTypesAsync()).Returns(Task.FromResult(types.AsEnumerable()));
@@ -29,6 +30,7 @@ namespace Catalog.UnitTests.Mocks
                 .Setup(r => r.CreateItem(It.IsAny<CatalogItem>()))
                 .Returns((CatalogItem item) =>
                 {
+                    item.Id = items.Max(i => i.Id) + 1;
                     items.Add(item);
                     return item;
                 });
