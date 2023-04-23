@@ -72,7 +72,7 @@ namespace Catalog.Api.Controllers
 
         [HttpGet("types")]
         [ProducesResponseType(typeof(IEnumerable<CatalogType>), StatusCodes.Status200OK, "application/json")]
-        public async Task<IEnumerable<CatalogType>> GetTypes()
+        public async Task<IEnumerable<CatalogType>> GetTypesAsync()
         {
             return await repository.GetAllTypesAsync();
         }
