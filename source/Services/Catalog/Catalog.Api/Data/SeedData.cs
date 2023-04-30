@@ -212,7 +212,7 @@ namespace Catalog.Api.Data
                 {
                     Name = "Reebok Sweatpants", Description = "Perfect fit pants",
                     Price = 1400M, PictureFileName = "reebok-sweatpants-1.jpg",
-                    CatalogTypeId = 2, CatalogBrandId = 2,
+                    CatalogTypeId = 4, CatalogBrandId = 5,
                     AvailableInStock = 30, RestockThreshold = 5,
                     MaxStockThreshold = 50, OnReorder = false
                 },
