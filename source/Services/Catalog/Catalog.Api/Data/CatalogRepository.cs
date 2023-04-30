@@ -23,7 +23,7 @@ namespace Catalog.Api.Data
 
         public async Task<CatalogItem?> GetItemByIdAsync(int itemId)
         {
-            return await context.CatalogItems.FindAsync(itemId);
+            return await context.CatalogItems.AsNoTracking().FirstOrDefaultAsync(i => i.Id == itemId);
         }
 
         public CatalogItem CreateItem(CatalogItem item)

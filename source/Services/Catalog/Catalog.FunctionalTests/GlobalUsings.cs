@@ -6,23 +6,27 @@ global using Catalog.Api.Data.Dtos;
 global using Catalog.FunctionalTests.Services;
 global using Catalog.FunctionalTests.Data;
 
-global using System.Text;
+global using System.Security.Claims;
 
 global using System.Reflection;
 
+global using System.Text.Encodings.Web;
+
 global using System.Net;
 global using System.Net.Http.Json;
-global using System.Net.Http.Headers;
 
-global using System.IdentityModel.Tokens.Jwt;
-
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.TestHost;
 
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
 
 global using Microsoft.EntityFrameworkCore;
 
-global using Microsoft.IdentityModel.Tokens;
+global using Catalog.FunctionalTests.Auth;
