@@ -37,6 +37,11 @@ namespace Basket.Api.Controllers
         [ProducesResponseType(typeof(UnauthorizedObjectResult), StatusCodes.Status401Unauthorized, "application/json")]
         public async Task<ActionResult> CheckoutAsync(BasketCheckout checkoutInfo, [FromHeader(Name = "x-requestid")] Guid requestId)
         {
+            if (requestId == Guid.Empty)
+            {
+                return BadRequest("Empty request ID");
+            }
+
             var customerId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (customerId is null)
