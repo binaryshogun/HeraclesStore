@@ -97,7 +97,7 @@ namespace Catalog.Api.Controllers
 
             var catalogItemReadDto = mapper.Map<CatalogItemReadDto>(createdItem);
 
-            return CreatedAtAction(nameof(GetItemByIdAsync), new { Id = catalogItemReadDto.Id }, catalogItemReadDto);
+            return CreatedAtAction(nameof(GetItemByIdAsync), new { catalogItemId = catalogItemReadDto.Id }, catalogItemReadDto);
         }
 
         [Authorize]
