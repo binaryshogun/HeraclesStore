@@ -1,0 +1,5 @@
+{
+    "ConnectionStrings": {
+        "TestDb": "Host=localhost;Port=5432;Database=OrderingTestDb;Username=postgres;Password=mysecretpassword"
+    }
+}
