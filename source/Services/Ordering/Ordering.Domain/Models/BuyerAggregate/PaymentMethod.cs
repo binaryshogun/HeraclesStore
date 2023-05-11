@@ -30,9 +30,9 @@ namespace Ordering.Domain.Models.BuyerAggregate
         {
             this.alias = alias;
 
-            this.cardNumber = string.IsNullOrWhiteSpace(cardNumber) ? cardNumber : throw new OrderingDomainException("Invalid card number");
-            this.securityNumber = string.IsNullOrWhiteSpace(securityNumber) ? cardNumber : throw new OrderingDomainException("Invalid security number");
-            this.cardHolderName = string.IsNullOrWhiteSpace(cardHolderName) ? cardNumber : throw new OrderingDomainException("Invalid card holder name");
+            this.cardNumber = !string.IsNullOrWhiteSpace(cardNumber) ? cardNumber : throw new OrderingDomainException("Invalid card number");
+            this.securityNumber = !string.IsNullOrWhiteSpace(securityNumber) ? cardNumber : throw new OrderingDomainException("Invalid security number");
+            this.cardHolderName = !string.IsNullOrWhiteSpace(cardHolderName) ? cardNumber : throw new OrderingDomainException("Invalid card holder name");
             this.expiration = expiration >= DateTime.UtcNow ? expiration : throw new OrderingDomainException("Invalid expiration date");
 
             this.cardTypeId = cardTypeId;

@@ -25,8 +25,8 @@ namespace Ordering.Domain.Models.BuyerAggregate
         /// <exception cref="ArgumentNullException"></exception>
         public Buyer(Guid identityId, string name) : this()
         {
-            IdentityId = identityId == Guid.Empty ? identityId : throw new ArgumentException("Invalid identity Id value", nameof(identityId));
-            Name = string.IsNullOrEmpty(name) ? name : throw new ArgumentNullException(nameof(name));
+            IdentityId = identityId != Guid.Empty ? identityId : throw new ArgumentException("Invalid identity Id value", nameof(identityId));
+            Name = !string.IsNullOrEmpty(name) ? name : throw new ArgumentNullException(nameof(name));
         }
 
         public Guid IdentityId { get; private set; }
