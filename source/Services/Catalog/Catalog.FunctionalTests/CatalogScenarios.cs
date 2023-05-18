@@ -185,7 +185,7 @@ namespace Catalog.FunctionalTests
 
             var createDto = new CatalogItemUpdateDto()
             {
-                Id = 1,
+                Id = 2,
                 Name = "requestreq",
                 Description = "requestrequestrequestrequestre",
                 Price = 100M,
@@ -258,7 +258,7 @@ namespace Catalog.FunctionalTests
             using var client = new CatalogWebHostFactory().CreateClient();
 
             // When
-            var response = await client.DeleteAsync(ApiLinks.Delete(1));
+            var response = await client.DeleteAsync(ApiLinks.Delete(3));
 
             // Then
             response.EnsureSuccessStatusCode();

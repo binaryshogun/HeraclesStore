@@ -88,9 +88,9 @@ namespace Basket.Api
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Heracles store - Catalog HTTP API",
+                    Title = "Heracles store - Basket HTTP API",
                     Version = "v1",
-                    Description = "The Catalog Service HTTP API"
+                    Description = "The Basket Service HTTP API"
                 });
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

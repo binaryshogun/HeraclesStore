@@ -34,7 +34,7 @@ namespace Identity.FunctionalTests
             // Given
             using var client = new IdentityWebHostFactory().CreateClient();
 
-            await SignUpUser(client, "NewUser123", "newuser123@example.com", "Password123");
+            await SignUpUser(client, "newuser123@example.com", "NewNewUser", "Password123");
 
             // When
             var response = await SignInUser(client, "newuser123@example.com", "Password123");
