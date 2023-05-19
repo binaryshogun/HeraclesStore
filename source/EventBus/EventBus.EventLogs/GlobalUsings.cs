@@ -7,4 +7,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Storage;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-global using MessageBus.Abstractions.Events;
+global using EventBus.Abstractions.Events;

@@ -1,4 +1,4 @@
-namespace MessageBus.Abstractions.Events
+namespace EventBus.Abstractions.Events
 {
     public record IntegrationEvent
     {

@@ -1,4 +1,4 @@
-namespace MessageBus.Abstractions.Extensions
+namespace EventBus.Abstractions.Extensions
 {
     public static class GenericTypesExtensions
     {

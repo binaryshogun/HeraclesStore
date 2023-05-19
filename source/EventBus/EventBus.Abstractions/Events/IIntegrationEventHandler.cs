@@ -1,4 +1,4 @@
-namespace MessageBus.Abstractions.Events
+namespace EventBus.Abstractions.Events
 {
     public interface IIntegrationEventHandler<in TIntegrationEvent>
         where TIntegrationEvent : IntegrationEvent

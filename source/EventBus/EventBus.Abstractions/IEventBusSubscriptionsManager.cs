@@ -1,4 +1,4 @@
-namespace MessageBus.Abstractions
+namespace EventBus.Abstractions
 {
     public interface IEventBusSubscriptionsManager
     {

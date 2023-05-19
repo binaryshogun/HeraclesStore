@@ -1,3 +1,3 @@
 global using System.Text.Json.Serialization;
 
-global using MessageBus.Abstractions.Events;
+global using EventBus.Abstractions.Events;
