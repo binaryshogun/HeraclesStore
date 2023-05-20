@@ -1,4 +1,4 @@
-namespace EventBus.Logging
+namespace EventBus.EventLogs
 {
     public class IntegrationEventLogContext : DbContext
     {

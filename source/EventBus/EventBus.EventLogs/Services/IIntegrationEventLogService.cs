@@ -1,4 +1,4 @@
-namespace EventBus.Logging.Services
+namespace EventBus.EventLogs.Services
 {
     public interface IIntegrationEventLogService
     {
