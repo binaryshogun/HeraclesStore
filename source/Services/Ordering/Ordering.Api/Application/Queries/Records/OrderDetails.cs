@@ -13,6 +13,8 @@ namespace Ordering.Api.Application.Queries.Records
         public string? ZipCode { get; init; }
         public decimal Total { get; init; }
 
+        public string? BuyerId { get; init; }
+
         public List<OrderItemSummary>? OrderItems { get; set; }
     }
 }
