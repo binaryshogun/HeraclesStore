@@ -11,7 +11,32 @@ builder.Services
     .AddEventBus(builder.Configuration)
     .AddCustomSwaggerGen();
 
+builder.Services.AddScoped<IBasketRepository, RedisBasketRepository>();
+
+builder.Services.AddGrpc(options =>
+{
+    options.EnableDetailedErrors = true;
+});
+builder.Services.AddGrpcReflection();
+
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
+
+builder.WebHost.UseKestrel(options =>
+{
+    var ports = NetworkConfigurator.GetDefinedPorts(builder.Configuration);
+
+    options.Listen(IPAddress.Any, ports.httpPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+
+    options.Listen(IPAddress.Any, ports.grpcPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 
 // Configuring Serilog logger
 Log.Logger = new LoggerConfiguration()
@@ -26,8 +51,6 @@ Log.Logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
-builder.Services.AddScoped<IBasketRepository, RedisBasketRepository>();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -40,6 +63,27 @@ app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGrpcService<BasketService>();
+app.MapGet("/proto", async context =>
+{
+    context.Response.ContentType = "text/plain";
+    using var fileStream = new FileStream(Path.Combine(app.Environment.ContentRootPath, "Proto", "basket.proto"), FileMode.Open, FileAccess.Read);
+    using var streamReader = new StreamReader(fileStream);
+
+    while (!streamReader.EndOfStream)
+    {
+        var line = await streamReader.ReadLineAsync() ?? "";
+        if (line != "/* >>" || line != "<< */")
+        {
+            await context.Response.WriteAsync(line);
+        }
+    }
+});
+if (app.Environment.IsDevelopment())
+{
+    app.MapGrpcReflectionService();
+}
 
 app.MapControllers();
 app.MapHealthChecks("/hc", new HealthCheckOptions()

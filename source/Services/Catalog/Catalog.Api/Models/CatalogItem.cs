@@ -118,7 +118,7 @@ namespace Catalog.Api.Models
         {
             if (this is not null && PictureFileName is not null)
             {
-                PictureUri = pictureBaseUrl + PictureFileName;
+                PictureUri = pictureBaseUrl.Replace("{catalogItemId}", Id.ToString());
             }
         }
     }
