@@ -10,6 +10,15 @@ namespace Ordering.Api.Infrastructure.Modules
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
+            // Register command handlers as integration event handlers
+            builder.RegisterAssemblyTypes(typeof(CreateOrderCommandHandler).Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
+
+            // Register all the command handlers
+            builder.RegisterAssemblyTypes(typeof(CreateOrderCommand).Assembly).AsClosedTypesOf(typeof(IRequestHandler<,>));
+
+            // Register all the domain event handlers
+            builder.RegisterAssemblyTypes(typeof(BuyerPaymentMethodVerifiedDomainEventHandler).Assembly).AsClosedTypesOf(typeof(INotificationHandler<>));
+
             // Register behaviors
             builder.RegisterGeneric(typeof(LoggingBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>));

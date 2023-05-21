@@ -34,14 +34,26 @@ namespace Ordering.Api.Controllers
 
         [HttpGet("{orderId:int}")]
         [ProducesResponseType(typeof(OrderDetails), StatusCodes.Status200OK, "application/json")]
+        [ProducesResponseType(typeof(UnauthorizedResult), StatusCodes.Status401Unauthorized, "application/json")]
         [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound, "application/json")]
         public async Task<ActionResult<OrderDetails>> GetOrderAsync(int orderId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId is null || Guid.Parse(userId) == Guid.Empty)
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var query = new GetOrderQuery(orderId);
 
                 var order = await mediator.Send(query);
+                if (order.BuyerId != userId)
+                {
+                    return Unauthorized();
+                }
 
                 return order;
             }
@@ -60,6 +72,21 @@ namespace Ordering.Api.Controllers
             var cardTypes = await mediator.Send(query);
 
             return cardTypes;
+        }
+
+        [HttpPost("draft")]
+        [ProducesResponseType(typeof(OrderDraftDto), StatusCodes.Status200OK, "application/json")]
+        public async Task<ActionResult<OrderDraftDto>> CreateOrderDraftFromBasketDataAsync(CreateOrderDraftCommand createOrderDraftCommand)
+        {
+            logger.LogInformation(
+                "[Ordering] ---> Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+                createOrderDraftCommand.GetGenericTypeName(),
+                nameof(createOrderDraftCommand.BuyerId),
+                createOrderDraftCommand.BuyerId,
+                createOrderDraftCommand
+            );
+
+            return await mediator.Send(createOrderDraftCommand);
         }
 
         [HttpPut("ship")]

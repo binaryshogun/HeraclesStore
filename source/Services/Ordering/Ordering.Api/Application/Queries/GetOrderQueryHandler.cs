@@ -20,7 +20,7 @@ namespace Ordering.Api.Application.Queries
                         o.Id, o.OrderDate, o.Description, SUM(oi.Units*oi.UnitPrice) as Total, 
                         o.Address_Street as Street, o.Address_City as City, 
                         o.Address_State as State, o.Address_Country as Country,
-                        o.Address_ZipCode as ZipCode, os.Name as Status,
+                        o.Address_ZipCode as ZipCode, os.Name as Status, o.BuyerId
                         oi.ProductName, oi.Units, oi.UnitPrice, oi.PictureUrl
                         FROM ordering.orders o
                         LEFT JOIN ordering.orderitems oi ON o.Id = oi.OrderId

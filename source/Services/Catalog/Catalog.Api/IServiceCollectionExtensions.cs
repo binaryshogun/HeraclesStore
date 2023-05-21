@@ -12,7 +12,10 @@ namespace Catalog.Api
         /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomMVC(this IServiceCollection services)
         {
-            services.AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)));
+            services
+                .AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)))
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -38,13 +41,22 @@ namespace Catalog.Api
         {
             services.AddDbContext<CatalogContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("CatalogDb"),
+                options.UseSqlServer(configuration.GetConnectionString("CatalogDatabase"),
                     sqlServerOptions =>
                     {
                         sqlServerOptions.MigrationsAssembly(typeof(Program).Assembly.GetName().Name);
                         sqlServerOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
                     });
                 options.LogTo(Log.Logger.Information, LogLevel.Information);
+            });
+
+            services.AddDbContext<IntegrationEventLogContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("CatalogDatabase"), sqlServerOptions =>
+                {
+                    sqlServerOptions.MigrationsAssembly(typeof(Program).Assembly.GetName().Name);
+                    sqlServerOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
+                });
             });
 
             return services;
@@ -90,11 +102,11 @@ namespace Catalog.Api
 
             healthCheckBuilder
                 .AddCheck("self", () => HealthCheckResult.Healthy())
-                .AddSqlServer(configuration.GetConnectionString("CatalogDb")!,
-                    name: "CatalogDb-check",
-                    tags: new string[] { "catalogdatabase" });
-
-            // TODO: RabbitMQ health check
+                .AddSqlServer(configuration.GetConnectionString("CatalogDatabase")!,
+                    name: "Catalog-Database-check",
+                    tags: new string[] { "catalogdatabase" })
+                .AddRabbitMQ($"amqp://{configuration.GetConnectionString("EventBus")}",
+                    name: "Catalog-RabbitMQ-EventBus-check");
 
             return services;
         }
@@ -163,13 +175,88 @@ namespace Catalog.Api
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = configuration.GetSection("JWT").GetValue<string>("Issuer"),
                         ValidAudience = configuration.GetSection("JWT").GetValue<string>("Issuer"),
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(
-                                Environment.GetEnvironmentVariable("JWT_SECURITYKEY")!
-                            )
-                        ),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT").GetValue<string>("SecurityKey")!))
                     };
                 });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds services needed to integrate API with others mircoservices to <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <param name="configuration">Application's configuration.</param>
+        /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
+        public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(_ => (DbConnection c) => new IntegrationEventLogService(c));
+            services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = configuration.GetConnectionString("EventBus"),
+                    Port = AmqpTcpEndpoint.UseDefaultPort,
+                    VirtualHost = ConnectionFactory.DefaultVHost,
+                    DispatchConsumersAsync = true
+                };
+
+                var username = configuration.GetSection("EventBus").GetValue<string?>("UserName");
+                var password = configuration.GetSection("EventBus").GetValue<string?>("Password");
+                var retryCount = configuration.GetSection("EventBus").GetValue<int>("RetryCount");
+
+                if (!string.IsNullOrEmpty(username))
+                {
+                    factory.UserName = username;
+                }
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    factory.Password = password;
+                }
+
+                if (retryCount <= 0)
+                {
+                    retryCount = 5;
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+            });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds event bus messaging support to application's services.
+        /// </summary>
+        /// <param name="services">Application's services.</param>
+        /// <param name="configuration">Application's configuration.</param>
+        /// <returns></returns>
+        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+                {
+                    var subscriptionClientName = configuration.GetSection("EventBus").GetValue<string>("SubscriptionClientName");
+                    var retryCount = configuration.GetSection("EventBus").GetValue<int>("RetryCount");
+                    if (retryCount <= 0)
+                    {
+                        retryCount = 5;
+                    }
+
+                    var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+                    var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+
+                    return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, sp, eventBusSubcriptionsManager, queueName: subscriptionClientName, retryCount: retryCount);
+                })
+                .AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>()
+                .AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>()
+                .AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
             return services;
         }

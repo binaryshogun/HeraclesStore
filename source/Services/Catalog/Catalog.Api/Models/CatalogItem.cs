@@ -2,6 +2,11 @@ namespace Catalog.Api.Models
 {
     public class CatalogItem
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="CatalogItem" />.
+        /// </summary>
+        public CatalogItem() { }
+
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
@@ -39,11 +44,6 @@ namespace Catalog.Api.Models
         /// </summary>
         /// <value><see cref="bool" /></value>
         public bool OnReorder { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="CatalogItem" />.
-        /// </summary>
-        public CatalogItem() { }
 
         /// <summary>
         /// Decrements the quantity of a particular item in stock and ensures the <see cref="RestockThreshold" /> hasn't been breached.

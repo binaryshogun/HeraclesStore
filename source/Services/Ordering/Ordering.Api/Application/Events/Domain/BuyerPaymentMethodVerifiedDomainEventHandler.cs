@@ -1,7 +1,7 @@
 namespace Ordering.Api.Application.Events.Domain
 {
-    public class BuyerPaymentMethodVerifiedDomainEventHandler :
-        INotificationHandler<BuyerPaymentMethodVerifiedDomainEvent>
+    public class BuyerPaymentMethodVerifiedDomainEventHandler
+        : INotificationHandler<BuyerPaymentMethodVerifiedDomainEvent>
     {
         private readonly IOrderRepository repository;
         private readonly ILogger<BuyerPaymentMethodVerifiedDomainEventHandler> logger;

@@ -30,8 +30,7 @@ namespace Identity.Api.Services
         private JwtSecurityToken BuildToken(List<Claim>? claims, SigningCredentials credentials, DateTime expiration)
         {
             return new JwtSecurityToken(
-                issuer: configuration["JWT:Issuer"],
-                audience: configuration["JWT:Audience"],
+                issuer: configuration.GetSection("JWT").GetValue<string>("Issuer"),
                 claims: claims,
                 expires: expiration,
                 signingCredentials: credentials
@@ -64,11 +63,7 @@ namespace Identity.Api.Services
         private SigningCredentials CreateSigningCredentials()
         {
             return new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(
-                        Environment.GetEnvironmentVariable("JWT_SECURITYKEY")!
-                    )
-                ),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT").GetValue<string>("SecurityKey")!)),
                 SecurityAlgorithms.HmacSha256
             );
         }

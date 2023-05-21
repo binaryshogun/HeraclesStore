@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CatalogApi.Migrations
+namespace Catalog.Api.Migrations
 {
     /// <inheritdoc />
     public partial class Discount_For_CatalogItem : Migration
