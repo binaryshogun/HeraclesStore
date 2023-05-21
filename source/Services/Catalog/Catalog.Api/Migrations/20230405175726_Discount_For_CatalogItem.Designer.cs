@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CatalogApi.Migrations
+namespace Catalog.Api.Migrations
 {
     [DbContext(typeof(CatalogContext))]
     [Migration("20230405175726_Discount_For_CatalogItem")]

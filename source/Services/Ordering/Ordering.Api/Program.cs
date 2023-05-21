@@ -4,11 +4,16 @@ builder.Services
     .AddCustomMVC()
     .AddEndpointsApiExplorer()
     .AddCustomDbContext(builder.Configuration)
-    .AddCustomConfiguration()
     .AddCustomAuthentication(builder.Configuration)
+    .AddCustomIntegrations(builder.Configuration)
+    .AddEventBus(builder.Configuration)
+    .AddCustomHealthChecks(builder.Configuration)
+    .AddCustomConfiguration()
     .AddCustomSwaggerGen()
-    .AddCustomHealthCheck(builder.Configuration)
     .AddSignalR();
+
+// Add environment variables to configuration
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -21,8 +26,7 @@ builder.Host
 
         containerBuilder.RegisterMediatR(mediatorConfiguration);
         containerBuilder.RegisterModule(new MediatorModule());
-        containerBuilder.RegisterModule(new ApplicationModule(
-            builder.Configuration.GetConnectionString("OrderingDatabase") ?? ""));
+        containerBuilder.RegisterModule(new ApplicationModule(builder.Configuration.GetConnectionString("OrderingDatabase") ?? ""));
     });
 
 // Configuring Serilog logger
@@ -30,7 +34,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.File("../../../Logs/ordering-api-.txt", rollingInterval: RollingInterval.Hour)
+    .WriteTo.File("../../../Logs/-ordering-api.txt", rollingInterval: RollingInterval.Hour)
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
@@ -64,5 +68,6 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions()
 app.MapHub<NotificationsHub>("/hub/notifications");
 
 await OrderingContextSeed.SeedAsync(app);
+EventBusConfiguratior.ConfigureEventBus(app);
 
 app.Run();

@@ -16,7 +16,7 @@ namespace Ordering.Infrastructure
             var domainEntities = context.ChangeTracker.Entries<Entity>()
                 .Where(x => x.Entity.DomainEvents is not null && x.Entity.DomainEvents.Any());
 
-            var domainEvents = domainEntities.SelectMany(x => x.Entity.DomainEvents).ToList();
+            var domainEvents = domainEntities.SelectMany(x => x.Entity.DomainEvents!).ToList();
 
             domainEntities.ToList().ForEach(entity => entity.Entity.ClearDomainEvents());
 

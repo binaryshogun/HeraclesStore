@@ -12,7 +12,10 @@ namespace Basket.Api
         /// <returns>Configured application's <see cref="IServiceCollection" />.</returns>
         public static IServiceCollection AddCustomMVC(this IServiceCollection services)
         {
-            services.AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)));
+            services
+                .AddControllers(options => options.Filters.Add(typeof(HttpGlobalExceptionFilter)))
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -69,10 +72,10 @@ namespace Basket.Api
             healthCheckBuilder
                 .AddCheck("self", () => HealthCheckResult.Healthy())
                 .AddRedis(configuration.GetValue<string>("RedisConnection")!,
-                    name: "Redis-check",
-                    tags: new string[] { "redis" });
-
-            // TODO: RabbitMQ health check
+                    name: "Basket-Redis-check",
+                    tags: new string[] { "redis" })
+                .AddRabbitMQ($"amqp://{configuration.GetConnectionString("EventBus")}",
+                    name: "Basket-RabbitMQ-check");
 
             return services;
         }
@@ -141,11 +144,7 @@ namespace Basket.Api
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = configuration.GetSection("JWT").GetValue<string>("Issuer"),
                         ValidAudience = configuration.GetSection("JWT").GetValue<string>("Issuer"),
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(
-                                Environment.GetEnvironmentVariable("JWT_SECURITYKEY")!
-                            )
-                        ),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWT").GetValue<string>("SecurityKey")!)),
                     };
                 });
 
@@ -162,11 +161,75 @@ namespace Basket.Api
         {
             services.AddSingleton<ConnectionMultiplexer>(serviceProvider =>
             {
-                var connectionString = configuration.GetValue<string>("RedisConnection");
+                var connectionString = configuration.GetConnectionString("Redis");
                 var options = ConfigurationOptions.Parse(connectionString!, true);
 
                 return ConnectionMultiplexer.Connect(options);
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = configuration.GetConnectionString("EventBus"),
+                    Port = AmqpTcpEndpoint.UseDefaultPort,
+                    VirtualHost = ConnectionFactory.DefaultVHost,
+                    DispatchConsumersAsync = true
+                };
+
+                var username = configuration.GetSection("EventBus").GetValue<string?>("UserName");
+                var password = configuration.GetSection("EventBus").GetValue<string?>("Password");
+                var retryCount = configuration.GetSection("EventBus").GetValue<int>("RetryCount");
+
+                if (!string.IsNullOrEmpty(username))
+                {
+                    factory.UserName = username;
+                }
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    factory.Password = password;
+                }
+
+                if (retryCount <= 0)
+                {
+                    retryCount = 5;
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+                {
+                    var subscriptionClientName = configuration.GetSection("EventBus").GetValue<string>("SubscriptionClientName");
+                    var retryCount = configuration.GetSection("EventBus").GetValue<int>("RetryCount");
+                    if (retryCount <= 0)
+                    {
+                        retryCount = 5;
+                    }
+
+                    var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+                    var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+
+                    return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, sp, eventBusSubcriptionsManager, queueName: subscriptionClientName, retryCount: retryCount);
+                })
+                .AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>()
+                .AddTransient<ProductPriceChangedIntegrationEventHandler>()
+                .AddTransient<OrderStartedIntegrationEventHandler>();
 
             return services;
         }

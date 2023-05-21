@@ -1,15 +1,15 @@
 namespace EventBus.EventLogs.Utilities
 {
-    public class ResilentTransaction
+    public class ResilientTransaction
     {
         private readonly DbContext context;
 
-        private ResilentTransaction(DbContext context)
+        private ResilientTransaction(DbContext context)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public static ResilentTransaction New(DbContext context)
+        public static ResilientTransaction New(DbContext context)
         {
             return new(context);
         }

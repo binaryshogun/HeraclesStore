@@ -3,11 +3,13 @@ namespace Ordering.Api.Application.Events.Domain
     public class OrderStartedDomainEventHandler : INotificationHandler<OrderStartedDomainEvent>
     {
         private readonly IBuyerRepository repository;
+        private readonly IOrderingIntegrationEventService orderingIntegrationEventService;
         private readonly ILogger<OrderStartedDomainEventHandler> logger;
 
-        public OrderStartedDomainEventHandler(IBuyerRepository repository, ILogger<OrderStartedDomainEventHandler> logger)
+        public OrderStartedDomainEventHandler(IBuyerRepository repository, IOrderingIntegrationEventService orderingIntegrationEventService, ILogger<OrderStartedDomainEventHandler> logger)
         {
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentNullException(nameof(orderingIntegrationEventService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -31,6 +33,8 @@ namespace Ordering.Api.Application.Events.Domain
 
             await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
+            var integrationEvent = new OrderStatusChangedToSubmittedIntegrationEvent(notification.Order.Id, notification.Order.OrderStatus.Name, buyer.Name);
+            await orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
             logger.LogInformation("[Ordering] ---> Buyer {BuyerName} and related payment method were validated or updated for order: {OrderId}",
                 buyer.Id, notification.Order.Id);
         }

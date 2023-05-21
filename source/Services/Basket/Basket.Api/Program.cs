@@ -5,9 +5,13 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddCustomConfiguration()
     .AddCustomAuthentication(builder.Configuration)
-    .AddCustomSwaggerGen()
     .AddCustomHealthCheck(builder.Configuration)
-    .AddCustomRedis(builder.Configuration);
+    .AddCustomRedis(builder.Configuration)
+    .AddIntegrationServices(builder.Configuration)
+    .AddEventBus(builder.Configuration)
+    .AddCustomSwaggerGen();
+
+builder.Configuration.AddEnvironmentVariables();
 
 // Configuring Serilog logger
 Log.Logger = new LoggerConfiguration()

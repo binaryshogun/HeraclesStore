@@ -46,6 +46,11 @@ namespace Ordering.Domain.Models.OrderAggregate
             AddOrderStartedDomainEvent(userId, userName, cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
         }
 
+        public static Order NewDraft()
+        {
+            return new Order();
+        }
+
         public int? BuyerId
         {
             get => buyerId;
