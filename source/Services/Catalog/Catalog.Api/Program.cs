@@ -6,6 +6,8 @@ builder.Services
     .AddCustomDbContext(builder.Configuration)
     .AddCustomAuthentication(builder.Configuration)
     .AddCustomHealthCheck(builder.Configuration)
+    .AddIntegrationServices(builder.Configuration)
+    .AddEventBus(builder.Configuration)
     .AddCustomSwaggerGen()
     .AddCustomConfiguration()
     .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
