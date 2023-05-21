@@ -8,6 +8,9 @@ global using MediatR.Extensions.Autofac.DependencyInjection.Builder;
 global using Autofac;
 global using Autofac.Extensions.DependencyInjection;
 
+global using Grpc.Core;
+global using Google.Protobuf.Collections;
+
 global using Dapper;
 
 global using FluentValidation;
@@ -18,6 +21,8 @@ global using Serilog.Context;
 global using RabbitMQ.Client;
 
 global using System.Text;
+
+global using System.Net;
 
 global using System.Data;
 global using System.Data.Common;
@@ -32,6 +37,8 @@ global using Microsoft.AspNetCore.SignalR;
 
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Filters;
+
+global using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 global using System.Security.Claims;
 
@@ -59,6 +66,8 @@ global using Ordering.Infrastructure.Idempotency;
 
 global using Ordering.Api;
 global using Ordering.Api.SignalR;
+global using Ordering.Api.Grpc;
+global using Ordering.Api.Network;
 global using Ordering.Api.Infrastructure;
 global using Ordering.Api.Infrastructure.Modules;
 global using Ordering.Api.Infrastructure.Filters;

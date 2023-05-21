@@ -16,7 +16,9 @@
       "applicationUrl": "http://localhost:5016",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT__SecurityKey": "SomethingSecret!"
+        "JWT__SecurityKey": "SomethingSecret!",
+        "NETWORK__HTTP_PORT": "5016",
+        "NETWORK__GRPC_PORT": "5003"
       }
     },
     "IIS Express": {
@@ -25,7 +27,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT__SecurityKey": "SomethingSecret!"
+        "JWT__SecurityKey": "SomethingSecret!",
+        "NETWORK__HTTP_PORT": "5016",
+        "NETWORK__GRPC_PORT": "5003"
       }
     }
   }

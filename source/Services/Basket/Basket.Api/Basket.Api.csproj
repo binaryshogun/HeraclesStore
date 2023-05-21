@@ -16,6 +16,13 @@
     <PackageReference Include="AspNetCore.HealthChecks.RabbitMQ" Version="6.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+    <PackageReference Include="Google.Protobuf" Version="3.23.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.53.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.54.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
@@ -23,6 +30,10 @@
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.104" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Proto\basket.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
   </ItemGroup>
 
   <ItemGroup>
