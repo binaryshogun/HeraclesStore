@@ -4,11 +4,13 @@ builder.Services
     .AddCustomMVC()
     .AddEndpointsApiExplorer()
     .AddCustomDbContext(builder.Configuration)
-    .AddCustomConfiguration()
     .AddCustomAuthentication(builder.Configuration)
-    .AddCustomSwaggerGen()
     .AddCustomHealthCheck(builder.Configuration)
+    .AddCustomSwaggerGen()
+    .AddCustomConfiguration()
     .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
 builder.Environment.WebRootPath = "Pictures";
@@ -41,6 +43,17 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Pictures")),
+    RequestPath = "/pictures"
+});
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Pictures")),
+    RequestPath = "/pictures"
+});
+
 app.MapControllers();
 app.MapHealthChecks("/hc", new HealthCheckOptions()
 {
@@ -53,5 +66,6 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions()
 });
 
 await SeedData.EnsurePopulated(app);
+EventBusConfigurator.ConfigureEventBus(app);
 
 app.Run();
