@@ -5,7 +5,7 @@ namespace Ordering.Api.Application.Events.Integration
         public UserCheckoutAcceptedIntegrationEvent(
             Guid userId, string userName, string city, string street, string state, string country, string zipCode,
             string cardNumber, string cardHolderName, DateTime cardExpiration, string cardSecurityNumber,
-            int cardTypeId, string buyer, Guid requestId, CustomerBasket basket)
+            int cardTypeId, Guid requestId, CustomerBasket basket)
         {
             UserId = userId;
             UserName = userName;
@@ -22,7 +22,6 @@ namespace Ordering.Api.Application.Events.Integration
             CardSecurityNumber = cardSecurityNumber;
             CardTypeId = cardTypeId;
 
-            Buyer = buyer;
             Basket = basket;
             RequestId = requestId;
         }
@@ -50,8 +49,6 @@ namespace Ordering.Api.Application.Events.Integration
         public string CardSecurityNumber { get; }
 
         public int CardTypeId { get; }
-
-        public string Buyer { get; }
 
         public Guid RequestId { get; }
 
