@@ -2,7 +2,7 @@ namespace Ordering.Api.Application.Models
 {
     public class BasketItem
     {
-        public int Id { get; init; }
+        public Guid Id { get; init; }
 
         public int ProductId { get; init; }
 

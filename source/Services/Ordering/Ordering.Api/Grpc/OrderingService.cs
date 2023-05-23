@@ -58,7 +58,7 @@ namespace Ordering.Api.Grpc
         {
             return items.Select(x => new BasketItem()
             {
-                Id = x.Id,
+                Id = Guid.Parse(x.Id),
                 ProductId = x.ProductId,
                 ProductName = x.ProductName,
                 UnitPrice = (decimal)x.UnitPrice,

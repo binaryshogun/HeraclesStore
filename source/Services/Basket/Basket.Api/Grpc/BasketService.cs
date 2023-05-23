@@ -58,7 +58,7 @@ namespace Basket.Api.Grpc
 
             customerBasket.Items.ForEach(item => response.Items.Add(new CustomerBasketItem
             {
-                Id = item.Id,
+                Id = item.Id.ToString(),
                 ProductId = item.ProductId,
                 UnitPrice = (double)item.UnitPrice,
                 OldUnitPrice = (double)item.OldUnitPrice,
@@ -79,7 +79,7 @@ namespace Basket.Api.Grpc
 
             customerBasketRequest.Items.ToList().ForEach(item => response.Items.Add(new BasketItem
             {
-                Id = item.Id,
+                Id = Guid.Parse(item.Id),
                 OldUnitPrice = (decimal)item.OldUnitPrice,
                 PictureUrl = item.PictureUrl,
                 ProductId = item.ProductId,
