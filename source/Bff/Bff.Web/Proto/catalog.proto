@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option csharp_namespace = "Bff.Web.Grpc";
+
+package CatalogApi;
+
+service GrpcCatalog {
+  rpc GetItemById (CatalogItemRequest) returns (CatalogItemResponse) {}
+  rpc GetItemsByIds (CatalogItemsRequest) returns (CatalogItemsResponse) {}
+}
+
+message CatalogItemRequest {
+	int32 id = 1;
+}
+
+message CatalogItemResponse {
+	int32 id = 1;
+	string name = 5;
+  string description = 10;
+  double price = 15;
+  string picture_file_name = 20;
+  string picture_uri = 25;
+  CatalogItemType catalog_type = 30;
+  CatalogItemBrand catalog_brand = 35;
+  int32 available_in_stock = 40;
+  int32 restock_threshold = 45;
+  int32 max_stock_threshold = 50;
+  bool on_reorder = 55;
+}
+
+message CatalogItemsRequest {
+	repeated int32 ids = 1;
+}
+
+message CatalogItemsResponse {
+  repeated CatalogItemResponse items = 1;
+}
+
+message CatalogItemBrand {
+	int32 id = 1;
+	string brand = 2;
+}
+
+message CatalogItemType {
+	int32 id = 1;
+	string type = 2;
+}

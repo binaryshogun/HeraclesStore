@@ -1,19 +1,17 @@
-namespace Basket.Api.Models
+namespace Bff.Web.Models.Basket
 {
-    public class BasketItem
+    public class BasketItemReadDto
     {
         public Guid Id { get; set; }
 
         public int ProductId { get; set; }
 
-        [Required]
         public string? ProductName { get; set; }
 
         public decimal UnitPrice { get; set; }
 
         public decimal OldUnitPrice { get; set; }
 
-        [Range(1, 1000)]
         public int Quantity { get; set; }
 
         public string? PictureUrl { get; set; }

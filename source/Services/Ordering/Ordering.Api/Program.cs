@@ -57,7 +57,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.File("../../../Logs/-ordering-api.txt", rollingInterval: RollingInterval.Hour)
+    .WriteTo.File("../../../Logs/ordering-api-.txt", rollingInterval: RollingInterval.Hour)
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 

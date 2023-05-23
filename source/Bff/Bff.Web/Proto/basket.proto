@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Basket.Api.Grpc";
+option csharp_namespace = "Bff.Web.Grpc";
 
 package BasketApi;
 

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Ordering.Api.Grpc";
+option csharp_namespace = "Bff.Web.Grpc";
 
 package OrderingApi;
 
@@ -10,10 +10,10 @@ service GrpcOrdering {
 
 message CreateOrderDraftRequest {
 	string buyer_id = 1;
-    repeated CustomerBasketItem items = 5;
+    repeated BasketItemDTO items = 5;
 }
 
-message CustomerBasketItem {
+message BasketItemDTO {
     string id = 1;
     int32 product_id = 5;
     string product_name = 10;
