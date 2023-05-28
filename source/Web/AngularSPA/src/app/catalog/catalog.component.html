@@ -1,0 +1,63 @@
+<div class="flex flex-row">
+    <section class="flex py-1 flex-col min-h-fit border-r-2 border-primary my-5 ml-5 px-5 sm:w-1/2 md:w-1/3 lg:w-1/4">
+        <div>
+            <p class="px-2 text-2xl">Filters</p>
+            <div class="flex mt-2 flex-row w-full">
+                <div class="flex flex-col justify-between my-1 mx-3 w-fit">
+                    <label class="px-2 text-xl" for="brand">Brand</label>
+                    <label class="px-2 text-xl" for="type">Type</label>
+                </div>
+                <div class="flex flex-col justify-between my-1 mx-3 w-full">
+                    <select class="form-control" id="brand" (change)="onBrandFilterChanged($event)">
+                        <option *ngFor="let brand of brands" [value]="brand.id">{{brand.brand}}</option>
+                    </select>
+                    <select class="text-xl form-control" id="type" (change)="onTypeFilterChanged($event)">
+                        <option *ngFor="let type of types" [value]="type.id">{{type.type}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button class="btn btn-primary my-2 mx-2 py-1 w-full" (click)="onFilterApplied($event)">Apply</button>
+            </div>
+        </div>
+    </section>
+    <div class="container mx-auto flex flex-col py-2 justify-center">
+        <div class="alert alert-warning catalog-alert mx-5 my-1" role="alert" [hidden]="!errorReceived">
+            Error requesting catalog products, please try later on
+        </div>
+        <div class="container">
+            <div *ngIf="catalog.displayData && catalog.displayData.length > 0">
+                <pager [model]="paginationInfo" (changed)="onPageChanged($event)"></pager>
+
+                <div class="catalog-items flex flex-wrap">
+                    <div class="w-full sm:w-1/2 px-4 md:w-1/3 lg:w-1/4" *ngFor="let item of catalog.displayData">
+                        <div [ngClass]="{'catalog-item': true, 'is-disabled': !authenticated }"
+                            (click)="addToCart(item)">
+                            <div class="catalog-thumbnail-wrapper">
+                                <div class="catalog-thumbnail-icon flex justify-center">
+                                    <button class="btn btn-secondary">Add to cart</button>
+                                </div>
+                                <img class="catalog-thumbnail"
+                                    src="{{this.catalogService.catalogUrl}}/{{item.id}}/picture" />
+                            </div>
+                            <div class="catalog-details flex justify-between items-center">
+                                <div class="catalog-name ml-3">
+                                    <span>{{item.name}}</span>
+                                </div>
+                                <div class="catalog-price mr-3">
+                                    <span>{{item.price | number:'1.2-2'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <pager [model]="paginationInfo" (changed)="onPageChanged($event)"></pager>
+            </div>
+            <div class="text-center" *ngIf="catalog.displayData && catalog.displayData.length == 0">
+                <span>THERE ARE NO RESULTS THAT MATCH YOUR SEARCH</span>
+            </div>
+        </div>
+    </div>
+</div>

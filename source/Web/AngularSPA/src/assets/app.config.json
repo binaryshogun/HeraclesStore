@@ -1,0 +1,7 @@
+{
+    "identityUrl": "http://localhost:5010",
+    "catalogUrl": "http://localhost:5012",
+    "purchaseUrl": "http://localhost:7000",
+    "signalrUrl": "http://localhost:5016",
+    "basketUrl": "http://localhost:5014"
+}

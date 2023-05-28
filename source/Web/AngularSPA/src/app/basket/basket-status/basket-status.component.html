@@ -1,0 +1,8 @@
+<a class="basketstatus pt-2 pb-2" [ngClass]="{'is-disabled': badge < 1}" [routerLink]="['basket']">
+    <div class="basketstatus-image ml-4 mr-1">
+        <img src="assets/images/basket.png" />
+    </div>
+    <div class="basketstatus-badge">
+        {{badge}}
+    </div>
+</a>

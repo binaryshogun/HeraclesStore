@@ -83,10 +83,10 @@ namespace Bff.Web
 
             healthCheckBuilder
                 .AddCheck("self", () => HealthCheckResult.Healthy())
-                .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Identity")}/hc"), name: "catalogapi-check", tags: new string[] { "catalogapi" })
+                .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Identity")}/hc"), name: "identityapi-check", tags: new string[] { "identityapi" })
                 .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Catalog")}/hc"), name: "catalogapi-check", tags: new string[] { "catalogapi" })
-                .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Basket")}/hc"), name: "catalogapi-check", tags: new string[] { "catalogapi" })
-                .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Ordering")}/hc"), name: "catalogapi-check", tags: new string[] { "catalogapi" });
+                .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Basket")}/hc"), name: "basketapi-check", tags: new string[] { "basketapi" })
+                .AddUrlGroup(new Uri($"{configuration.GetSection("Urls").GetValue<string>("Ordering")}/hc"), name: "orderingapi-check", tags: new string[] { "orderingapi" });
 
             return services;
         }
@@ -141,7 +141,7 @@ namespace Bff.Web
             services
                 .AddGrpcClient<GrpcBasket.GrpcBasketClient>((_, options) =>
                 {
-                    var basketApi = configuration.GetSection("Urls").GetValue<string>("Basket");
+                    var basketApi = configuration.GetSection("Urls").GetValue<string>("GrpcBasket");
                     options.Address = new Uri(basketApi!);
                 })
                 .AddInterceptor<GrpcExceptionInterceptor>();
@@ -149,7 +149,7 @@ namespace Bff.Web
             services
                 .AddGrpcClient<GrpcCatalog.GrpcCatalogClient>((_, options) =>
                 {
-                    var catalogApi = configuration.GetSection("Urls").GetValue<string>("Catalog");
+                    var catalogApi = configuration.GetSection("Urls").GetValue<string>("GrpcCatalog");
                     options.Address = new Uri(catalogApi!);
                 })
                 .AddInterceptor<GrpcExceptionInterceptor>();
@@ -157,7 +157,7 @@ namespace Bff.Web
             services
                 .AddGrpcClient<GrpcOrdering.GrpcOrderingClient>((services, options) =>
                 {
-                    var orderingApi = configuration.GetSection("Urls").GetValue<string>("Ordering");
+                    var orderingApi = configuration.GetSection("Urls").GetValue<string>("GrpcOrdering");
                     options.Address = new Uri(orderingApi!);
                 })
                 .AddInterceptor<GrpcExceptionInterceptor>();

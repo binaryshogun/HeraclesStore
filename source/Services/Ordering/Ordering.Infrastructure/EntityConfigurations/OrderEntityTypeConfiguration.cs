@@ -18,7 +18,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
             builder.Property<string?>("description")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("Description")
-                .IsRequired(true);
+                .IsRequired(false);
 
             builder.Property<int>("orderStatusId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
@@ -39,10 +39,10 @@ namespace Ordering.Infrastructure.EntityConfigurations
 
             builder.Ignore(x => x.DomainEvents);
 
-            builder.OwnsOne(x => x.Address, adress =>
+            builder.OwnsOne(x => x.Address, address =>
             {
-                adress.Property<int>("OrderId").UseHiLo("orderseq", OrderingContext.DefaultSchema);
-                adress.WithOwner();
+                address.Property<int>("OrderId").UseHiLo("orderseq", OrderingContext.DefaultSchema);
+                address.WithOwner();
             });
 
             builder.HasOne(x => x.OrderStatus).WithMany().HasForeignKey("orderStatusId").IsRequired(true);

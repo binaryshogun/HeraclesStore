@@ -38,9 +38,9 @@ namespace Ordering.Api.Controllers
         [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound, "application/json")]
         public async Task<ActionResult<OrderDetails>> GetOrderAsync(int orderId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid buyerId);
 
-            if (userId is null || Guid.Parse(userId) == Guid.Empty)
+            if (buyerId == Guid.Empty)
             {
                 return Unauthorized();
             }
@@ -50,7 +50,7 @@ namespace Ordering.Api.Controllers
                 var query = new GetOrderQuery(orderId);
 
                 var order = await mediator.Send(query);
-                if (order.BuyerId != userId)
+                if (order.BuyerId != buyerId)
                 {
                     return Unauthorized();
                 }

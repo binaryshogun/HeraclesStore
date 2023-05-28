@@ -2,7 +2,7 @@ namespace Bff.Web.Models.Ordering
 {
     public class OrderDraftDto
     {
-        public string? OrderNumber { get; set; }
+        public int OrderNumber { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -25,8 +25,6 @@ namespace Bff.Web.Models.Ordering
         public string? CardNumber { get; set; }
 
         public string? CardHolderName { get; set; }
-
-        public bool IsDraft { get; set; }
 
         public DateTime CardExpiration { get; set; }
 

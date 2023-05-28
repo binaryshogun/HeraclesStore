@@ -1,0 +1,143 @@
+<div class="container mx-auto sm:px-4">
+    <h1 class="mb-4 mt-5">Checkout</h1>
+    <div class="relative px-3 py-3 mb-4 border rounded" role="alert" [hidden]="!errorReceived">
+        Not possible to create a new order, please try later on
+    </div>
+    <form [formGroup]="newOrderForm" (ngSubmit)="submitForm()">
+        <section class="u-background-brightest p-12">
+            <h2 class="mb-4">Shipping Address</h2>
+            <div class="flex flex-wrap ">
+                <div class="w-1/2">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['street'].valid && newOrderForm.controls['street'].touched}">
+                        <label>Address</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-full u-maxwidth-unset"
+                            type="text" placeholder="Street" formControlName="street">
+                        <div *ngIf="newOrderForm.controls['street'].hasError('required') && newOrderForm.controls['street'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['city'].valid && newOrderForm.controls['city'].touched}">
+                        <label>City</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-full u-maxwidth-unset"
+                            type="text" placeholder="City" formControlName="city">
+                        <div *ngIf="newOrderForm.controls['city'].hasError('required') && newOrderForm.controls['city'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['state'].valid && newOrderForm.controls['state'].touched}">
+                        <label>State</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-full u-maxwidth-unset"
+                            type="text" placeholder="state" formControlName="state">
+                        <div *ngIf="newOrderForm.controls['state'].hasError('required') && newOrderForm.controls['state'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['country'].valid && newOrderForm.controls['country'].touched}">
+                        <label>Country</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-full u-maxwidth-unset"
+                            type="text" placeholder="country" formControlName="country">
+                        <div *ngIf="newOrderForm.controls['country'].hasError('required') && newOrderForm.controls['country'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="mt-5 mb-4">Payment method</h2>
+            <div class="flex flex-wrap ">
+                <div class="md:w-1/2 pr-4 pl-4">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['cardnumber'].valid && newOrderForm.controls['cardnumber'].touched}">
+                        <label>Card number</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-full u-maxwidth-unset"
+                            type="text" placeholder="000000000000000" formControlName="cardnumber">
+                        <div *ngIf="newOrderForm.controls['cardnumber'].hasError('required') && newOrderForm.controls['cardnumber'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 pr-4 pl-4">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['cardholdername'].valid && newOrderForm.controls['cardholdername'].touched}">
+                        <label>Cardholder name</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-full u-maxwidth-unset"
+                            type="text" placeholder="Card holder" formControlName="cardholdername">
+                        <div *ngIf="newOrderForm.controls['cardholdername'].hasError('required') && newOrderForm.controls['cardholdername'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 pr-4 pl-4">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['expirationdate'].valid && newOrderForm.controls['expirationdate'].touched}">
+                        <label>Expiration date</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-1/2 u-maxwidth-unset"
+                            type="text" placeholder="MM/YY" formControlName="expirationdate">
+                        <div *ngIf="newOrderForm.controls['expirationdate'].hasError('required') && newOrderForm.controls['expirationdate'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 pr-4 pl-4">
+                    <div class="mb-4"
+                        [ngClass]="{'has-error':!newOrderForm.controls['securitycode'].valid && newOrderForm.controls['securitycode'].touched}">
+                        <label class="orders_new-title">Security code</label>
+                        <input
+                            class="block appearance-none py-1 px-2 mb-1 text-base leading-normal bg-white text-gray-800 border border-gray-200 rounded form-input w-1/2 u-maxwidth-unset"
+                            type="text" placeholder="000" formControlName="securitycode">
+                        <div *ngIf="newOrderForm.controls['securitycode'].hasError('required') && newOrderForm.controls['securitycode'].touched"
+                            class="relative px-3 py-3 mb-4 border rounded bg-red-200 border-red-300 text-red-800">
+                            Required field.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="mt-5 mb-4">Order details</h2>
+            <article class="divider divider--bottom flex items-center pb-3 mt-3 u-text-sm"
+                *ngFor="let item of order.orderItems">
+                <div class="orders_new-thumbnail-container">
+                    <div class="orders_new-thumbnail-wrapper">
+                        <img class="orders_new-thumbnail" src="{{item.pictureUrl}}">
+                    </div>
+                </div>
+                <div class="flex flex-wrap  w-full ml-3">
+                    <div class="w-1/2">{{item.productName}}</div>
+                    <div class="w-1/5">$ {{item.unitPrice | number:'.2-2'}}</div>
+                    <div class="w-1/5">{{item.units}}</div>
+                    <div class="w-1/5 text-right">$ {{(item.units * item.unitPrice) | number:'.2-2'}}</div>
+                </div>
+            </article>
+
+            <div class="divider flex items-center justify-end mb-4 pt-4 uppercase u-text-xl">
+                <div>Total</div>
+                <div class="ml-3">${{ order.total | number:'.2-2'}}</div>
+            </div>
+
+            <div class="orders_new-buttons flex justify-end items-center">
+                <a class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-gray-600 text-white hover:bg-gray-700"
+                    routerLink="/basket">Back to basket</a>
+
+                <button
+                    class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-blue-600 text-white hover:bg-blue-600 ml-3"
+                    [disabled]="!newOrderForm.valid || isOrderProcessing" type="submit">Place
+                    Order</button>
+            </div>
+        </section>
+    </form>
+</div>

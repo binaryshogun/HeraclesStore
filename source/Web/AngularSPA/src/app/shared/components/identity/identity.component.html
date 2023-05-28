@@ -1,0 +1,33 @@
+<div class="identity flex flex-row">
+    <section class="identity-section" *ngIf="!authenticated">
+        <div class="cursor-pointer pt-2 pb-2" [routerLink]="['login']">
+            <div class="identity-name flex flex-row btn btn-bright justify-center">
+                <p class="text-white">Sign In</p>
+                <img class="identity-image ml-2" src="../../../../assets/images/profile.png">
+            </div>
+        </div>
+    </section>
+    <section class="identity-drop" *ngIf="!authenticated">
+        <div class="identity-item" [routerLink]="['login']">
+            <div class="identity-name">Sign In</div>
+        </div>
+        <div class="identity-item" [routerLink]="['register']">
+            <div class="identity-name">Sign Up</div>
+        </div>
+    </section>
+    <section class="identity-section cursor-pointer pt-2 pb-2" *ngIf="authenticated">
+        <div class="identity-name flex flex-row btn btn-bright justify-center">
+            <p cl="text-white">{{userName}}</p>
+            <img class="identity-image ml-2" src="../../../../assets/images/profile.png">
+        </div>
+    </section>
+    <section class="identity-drop" *ngIf="authenticated">
+        <div class="identity-item" [routerLink]="['orders']">
+            <div class="identity-name">My orders</div>
+        </div>
+
+        <div class="identity-item" (click)="logoutClicked($event)">
+            <div class="identity-name">Log Out</div>
+        </div>
+    </section>
+</div>

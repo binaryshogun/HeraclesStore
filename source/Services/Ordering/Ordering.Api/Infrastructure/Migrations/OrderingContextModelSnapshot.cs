@@ -137,7 +137,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnName("PaymentMethodId");
 
                     b.Property<string>("description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Description");
 
@@ -209,7 +208,8 @@ namespace Ordering.Api.Infrastructure.Migrations
             modelBuilder.Entity("Ordering.Domain.Models.OrderAggregate.OrderStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -273,7 +273,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Ordering.Domain.Models.OrderAggregate.Address", "Address", b1 =>
+                    b.OwnsOne("Ordering.Domain.Models.OrderAggregate.Order.Address#Ordering.Domain.Models.OrderAggregate.Address", "Address", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .ValueGeneratedOnAdd()

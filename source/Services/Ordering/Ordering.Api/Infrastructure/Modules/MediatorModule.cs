@@ -7,8 +7,7 @@ namespace Ordering.Api.Infrastructure.Modules
             // Register validators
             builder.RegisterAssemblyTypes(typeof(GetOrderQueryValidator).Assembly)
                 .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
+                .AsImplementedInterfaces();
 
             // Register command handlers as integration event handlers
             builder.RegisterAssemblyTypes(typeof(CreateOrderCommandHandler).Assembly).AsClosedTypesOf(typeof(IIntegrationEventHandler<>));

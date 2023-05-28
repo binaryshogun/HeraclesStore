@@ -17,7 +17,7 @@ namespace Ordering.Api.Application.Queries
                 connection.Open();
 
                 const string ordersByUserSQL =
-                    @"SELECT o.Id, o.OrderDate, os.Name as Status, SUM(oi.Units*oi.UnitPrice) as Total
+                    @"SELECT o.Id, o.OrderDate AS Date, os.Name as Status, SUM(oi.Units*oi.UnitPrice) as Total
                         FROM ordering.orders o
                         LEFT JOIN ordering.orderitems oi ON o.Id = oi.OrderId
                         LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id

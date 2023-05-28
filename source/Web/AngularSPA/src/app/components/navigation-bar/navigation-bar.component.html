@@ -1,0 +1,17 @@
+<div class="flex flex-row justify-center items-center"
+    [ngClass]="{'app-header':true, 'app-header--expanded': router.url === '/catalog'}">
+    <nav class="flex flex-row justify-between items-center container h-1/2 mx-7">
+        <div>
+            <a routerLink="catalog"><img class="h-[150px]" src="../../../assets/images/logo2.png" /></a>
+        </div>
+        <div class="flex flex-row max-sm:flex-col max-sm:justify-center items-center">
+            <app-identity></app-identity>
+            <div class="btn btn-bright cursor-pointer flex flex-row items-center justify-center mx-2"
+                routerLink="catalog">
+                <p>Catalog</p>
+                <img class="h-auto w-[1.5rem] ml-2" src="../../../assets/images/catalog.jpg" />
+            </div>
+            <app-basket-status *ngIf="Authenticated"></app-basket-status>
+        </div>
+    </nav>
+</div>

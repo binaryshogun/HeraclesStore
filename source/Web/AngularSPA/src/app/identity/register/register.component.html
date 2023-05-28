@@ -1,0 +1,71 @@
+<div *ngIf="service.error$ | async as error"
+    class="h-auto flex flex-row justify-center items-center bg-red-600 text-white">
+    {{ error }}
+
+    <button class="absolute right-5 text-white" (click)="service.ClearError()">&times;</button>
+</div>
+
+
+<div class=" w-full mt-5 py-3 flex justify-center items-stretch">
+    <form [formGroup]="signUpForm" (ngSubmit)="submit()"
+        class="flex flex-col justify-center container max-sm:w-5/6 sm:w-1/2 md:w-1/3 lg:w-1/4">
+        <h1 class="text-lg mb-2 text-center">Create New Account</h1>
+
+        <div class="mb-2">
+            <label class="text-sm">Username</label>
+            <input type="text" class="border-2 border-gray-400 rounded w-full py-2 px-4" placeholder="Username"
+                formControlName="username" appFocus>
+            <span class="text-red-600 text-sm mb-2" *ngIf="username.errors && username.errors['minlength']">
+                Username should contain at least 5 characters
+            </span>
+            <span class="text-red-600 text-sm mb-2" *ngIf="username.errors && username.errors['required']">
+                Username is required
+            </span>
+        </div>
+
+        <div class="mb-2">
+            <label class="text-sm">Email</label>
+            <input type="email" class="border-2 border-gray-400 rounded w-full py-2 px-4" placeholder="user@example.com"
+                formControlName="email">
+            <span class="text-red-600 text-sm mb-2"
+                *ngIf="email.errors && (email.errors['pattern'] || email.errors['email'])">
+                Not a valid email
+            </span>
+            <span class="text-red-600 text-sm mb-2" *ngIf="email.errors && email.errors['required']">
+                Email is required
+            </span>
+        </div>
+
+        <div class="mb-2">
+            <label class="text-sm">Password</label>
+            <input type="password" class="border-2 border-gray-400 rounded w-full py-2 px-4" placeholder="•••••••••••"
+                formControlName="password">
+            <span class="text-red-600 text-sm mb-2" *ngIf="password.errors && password.errors['pattern']">
+                Password must contain at least one uppercase letter, at least one number and be at least 8
+                characters long
+            </span>
+            <span class="text-red-600 text-sm mb-2" *ngIf="password.errors && password.errors['required']">
+                Password is required
+            </span>
+        </div>
+
+        <div class="mb-2">
+            <label class="text-sm">Repeat Password</label>
+            <input type="password" class="border-2 border-gray-400 rounded w-full py-2 px-4" placeholder="•••••••••••"
+                formControlName="repeatedPassword">
+            <span class="text-red-600 text-sm mb-2" *ngIf="signUpForm.errors && signUpForm.errors['mismatch']">
+                Password and repeated password are not the same
+            </span>
+            <span class="text-red-600 text-sm mb-2"
+                *ngIf="repeatedPassword.errors && repeatedPassword.errors['required']">
+                You need to repeat password
+            </span>
+        </div>
+
+        <div class="flex flex-col mt-1 w-full">
+            <button [disabled]="!signUpForm.valid" type="submit" class="btn btn-primary">
+                Sign Up
+            </button>
+        </div>
+    </form>
+</div>

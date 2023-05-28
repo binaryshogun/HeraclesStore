@@ -15,6 +15,8 @@
 
         public async Task Handle(OrderStartedIntegrationEvent @event)
         {
+            logger.LogInformation("Handling checkout");
+
             using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}"))
             {
                 logger.LogInformation("[Basket] ---> Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);

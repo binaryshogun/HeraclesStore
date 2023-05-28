@@ -17,21 +17,17 @@ namespace Ordering.Api.Application.Queries
 
                 const string orderSQL =
                     @"SELECT TOP 1
-                        o.Id, o.OrderDate, o.Description, SUM(oi.Units*oi.UnitPrice) as Total, 
+                        o.Id, o.OrderDate AS Date, o.Description, (SELECT SUM(oi.Units*oi.UnitPrice) 
+                            FROM ordering.orderitems oi WHERE oi.OrderId=@id) AS Total,
                         o.Address_Street as Street, o.Address_City as City, 
                         o.Address_State as State, o.Address_Country as Country,
-                        o.Address_ZipCode as ZipCode, os.Name as Status, o.BuyerId
+                        o.Address_ZipCode as ZipCode, os.Name as Status, b.IdentityId as BuyerId,
                         oi.ProductName, oi.Units, oi.UnitPrice, oi.PictureUrl
                         FROM ordering.orders o
                         LEFT JOIN ordering.orderitems oi ON o.Id = oi.OrderId
+                        LEFT JOIN ordering.buyers b ON o.BuyerId = b.Id
                         LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id
-                        WHERE o.Id=@id
-                        GROUP BY o.ID, o.OrderDate, o.Description, 
-                        o.Address_Street, o.Address_City, 
-                        o.Address_State, o.Address_Country, 
-                        o.Address_ZipCode, os.Name,
-                        oi.ProductName, oi.Units, 
-                        oi.UnitPrice, oi.PictureUrl";
+                        WHERE o.Id=@id";
 
                 var order = await connection.QueryFirstOrDefaultAsync<OrderDetails>(orderSQL, new { id = request.OrderId });
 

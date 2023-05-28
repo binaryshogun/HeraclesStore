@@ -1,0 +1,25 @@
+<div class="pager">
+    <div class="container">
+        <article class="pager-wrapper">
+            <nav class="flex flex-row max-sm:flex-col sm:flex-row justify-center items-center">
+                <span class="pager-item pager-item--navigable btn btn-primary" id="Previous"
+                    [ngClass]="{'is-disabled' : buttonStates['previousDisabled']}" (click)="onPreviousCliked($event)"
+                    aria-label="Previous">
+                    Previous
+                </span>
+
+                <span class="pager-item">
+                    Showing {{model.items * model.actualPage + 1}} - {{model.items * (model.actualPage + 1)}} of
+                    {{model.totalItems}} products - Page {{model.actualPage + 1}} -
+                    {{model.totalPages}}
+                </span>
+
+                <span class="pager-item pager-item--navigable btn btn-primary" id="Next"
+                    [ngClass]="{'is-disabled': buttonStates['nextDisabled']}" (click)="onNextClicked($event)"
+                    aria-label="Next">
+                    Next
+                </span>
+            </nav>
+        </article>
+    </div>
+</div>

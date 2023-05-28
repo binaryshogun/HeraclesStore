@@ -1,0 +1,55 @@
+.btn {
+  background-color: transparent;
+  border-width: 3px;
+  font-size: $font-size-s;
+  font-weight: $font-weight-normal;
+  min-width: 10rem;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+
+  &:focus {
+    box-shadow: none;
+    opacity: .7;
+  }
+
+  &:hover {
+    color: $color-darkest !important;
+  }
+
+  &:active:focus {
+    box-shadow: none !important;
+  }
+
+  &:visited {
+    text-decoration: none;
+  }
+
+  &:disabled {
+    background-color: transparent;
+    border-color: $color-secondary-bright;
+    color: $color-secondary-bright;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+
+  &-primary {
+    border-color: $color-primary;
+    color: $color-primary;
+    margin: 0.5rem !important;
+  }
+
+  &-secondary {
+    border-color: $color-brightest;
+    background-color: $color-secondary;
+    color: $color-brightest;
+
+    &:hover {
+      color: $color-secondary-brighter !important;
+    }
+  }
+
+  &-bright {
+    border-color: $color-brightest;
+    color: white;
+  }
+}
