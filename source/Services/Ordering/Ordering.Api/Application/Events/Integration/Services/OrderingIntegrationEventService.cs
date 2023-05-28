@@ -49,6 +49,7 @@ namespace Ordering.Api.Application.Events.Integration.Services
             if (orderingContext.CurrentTransaction is not null)
             {
                 await eventLogService.SaveEventAsync(@event, orderingContext.CurrentTransaction);
+                return;
             }
 
             logger.LogWarning("[Ordering] ---> Integration event wasn't enqueued because transaction is empty");

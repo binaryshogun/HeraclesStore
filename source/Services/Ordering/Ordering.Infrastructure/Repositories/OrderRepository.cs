@@ -44,6 +44,10 @@ namespace Ordering.Infrastructure.Repositories
         {
             if (order.IsTransient())
             {
+                if (order.OrderStatus is not null)
+                {
+                    context.OrderStatus.Attach(order.OrderStatus);
+                }
                 return context.Orders.Add(order).Entity;
             }
 

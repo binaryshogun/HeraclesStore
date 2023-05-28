@@ -1,5 +1,3 @@
-using Bff.Web;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
@@ -10,7 +8,23 @@ builder.Services
     .AddApplicationServices()
     .AddGrpcServices(builder.Configuration)
     .AddCustomAuthentication(builder.Configuration)
+    .AddCustomHealthCheck(builder.Configuration)
     .AddCustomSwaggerGen();
+
+builder.WebHost.UseKestrel(options =>
+{
+    var ports = NetworkConfigurator.GetDefinedPorts(builder.Configuration);
+
+    options.Listen(IPAddress.Any, ports.httpPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+
+    options.Listen(IPAddress.Any, ports.grpcPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 
 // Configuring Serilog logger
 Log.Logger = new LoggerConfiguration()
@@ -34,7 +48,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
 app.MapControllers();
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
+});
 
 app.Run();

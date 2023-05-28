@@ -4,7 +4,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:6000",
+      "applicationUrl": "http://localhost:7000",
       "sslPort": 0
     }
   },
@@ -14,10 +14,12 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:6000",
+      "applicationUrl": "http://localhost:7000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT__SecurityKey": "SomethingSecret!"
+        "JWT__SecurityKey": "SomethingSecret!",
+        "NETWORK__HTTP_PORT": "7000",
+        "NETWORK__GRPC_PORT": "7010"
       }
     },
     "IIS Express": {
@@ -26,7 +28,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT__SecurityKey": "SomethingSecret!"
+        "JWT__SecurityKey": "SomethingSecret!",
+        "NETWORK__HTTP_PORT": "7000",
+        "NETWORK__GRPC_PORT": "7010"
       }
     }
   }

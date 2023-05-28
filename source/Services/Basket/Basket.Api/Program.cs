@@ -96,4 +96,6 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions()
     Predicate = r => r.Name.Contains("self")
 });
 
+EventBusConfigurator.ConfigureEventBus(app);
+
 app.Run();

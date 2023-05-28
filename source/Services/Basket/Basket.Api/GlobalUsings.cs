@@ -1,4 +1,5 @@
 global using Basket.Api;
+global using Basket.Api.Integration;
 global using Basket.Api.Models;
 global using Basket.Api.Exceptions;
 global using Basket.Api.Data;

@@ -14,11 +14,11 @@ namespace Ordering.Infrastructure
         public static async Task DispatchDomainEventsAsync(this IMediator mediator, OrderingContext context)
         {
             var domainEntities = context.ChangeTracker.Entries<Entity>()
-                .Where(x => x.Entity.DomainEvents is not null && x.Entity.DomainEvents.Any());
+                .Where(x => x.Entity.DomainEvents is not null && x.Entity.DomainEvents.Any()).ToList();
 
             var domainEvents = domainEntities.SelectMany(x => x.Entity.DomainEvents!).ToList();
 
-            domainEntities.ToList().ForEach(entity => entity.Entity.ClearDomainEvents());
+            domainEntities.ForEach(entity => entity.Entity.ClearDomainEvents());
 
             foreach (INotification domainEvent in domainEvents)
                 await mediator.Publish(domainEvent);

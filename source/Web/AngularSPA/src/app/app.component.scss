@@ -1,0 +1,23 @@
+@import 'src/styles/variables';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.app {
+    &-footer {
+        background-color: $color-primary;
+        color: white;
+        font-size: $font-size-m;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        margin: auto auto 0 auto;
+        height: 4rem;
+        width: 100%;
+        border-top: 2px solid $color-primary;
+    }
+}

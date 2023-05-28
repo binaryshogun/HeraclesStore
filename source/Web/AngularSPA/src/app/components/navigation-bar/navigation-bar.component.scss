@@ -1,0 +1,10 @@
+@import '../../../styles/variables';
+
+.app {
+    $header-height: 12rem;
+
+    &-header {
+        background: $color-primary;
+        height: $header-height;
+    }
+}

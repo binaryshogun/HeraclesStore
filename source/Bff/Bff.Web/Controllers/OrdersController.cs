@@ -14,7 +14,7 @@ namespace Bff.Web.Controllers
             this.orderingService = orderingService;
         }
 
-        [HttpGet("draft/{basketId:string}")]
+        [HttpGet("draft/{basketId:Guid}")]
         [ProducesResponseType(typeof(OrderDraftDto), StatusCodes.Status200OK, "application/json")]
         [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest, "application/json")]
         public async Task<ActionResult<OrderDraftDto?>> GetOrderDraftAsync(string buyerId)

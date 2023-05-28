@@ -26,11 +26,12 @@ namespace Ordering.Api.Application.Events.Domain
                 notification.Order.Id, OrderStatus.Cancelled.Name, OrderStatus.Cancelled.Id);
 
             var order = await orderRepository.GetAsync(notification.Order.Id);
+
             var buyer = await buyerRepository.GetByIdAsync(order?.BuyerId ?? 0);
 
             if (order is not null && buyer is not null)
             {
-                var integrationEvent = new OrderStatusChangedToCancelledIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name);
+                var integrationEvent = new OrderStatusChangedToCancelledIntegrationEvent(order.Id, OrderStatus.Cancelled.Name, buyer.Name);
                 await orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
             }
         }

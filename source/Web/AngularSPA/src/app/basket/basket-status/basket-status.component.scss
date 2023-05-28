@@ -1,0 +1,38 @@
+@import 'src/styles/variables';
+
+.basketstatus {
+    cursor: pointer;
+    float: right;
+    position: relative;
+    transition: all $animation-speed-default;
+
+    &.is-disabled {
+        opacity: .5;
+        pointer-events: none;
+    }
+
+    &-image {
+        height: auto;
+        width: 2rem;
+    }
+
+    &-badge {
+        background-color: $color-brightest;
+        border-radius: 50%;
+        bottom: 0;
+        color: $color-primary;
+        display: block;
+        font-size: $font-size-xxs;
+        line-height: 1.2rem;
+        height: 1.2rem;
+        right: 0;
+        position: absolute;
+        text-align: center;
+        transition: all $animation-speed-fast;
+        width: 1.2rem;
+    }
+
+    &:hover &-badge {
+        transform: scale(1.2) rotate(20deg);
+    }
+}

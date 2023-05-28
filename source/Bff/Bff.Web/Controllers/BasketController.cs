@@ -14,10 +14,16 @@ namespace Bff.Web.Controllers
             this.basketService = basketService;
         }
 
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult<CustomerBasketDto>> GetBasketAsync(string id)
+        {
+            return await this.basketService.GetByIdAsync(id) ?? new CustomerBasketDto();
+        }
+
         [HttpPut("update")]
         [ProducesResponseType(typeof(CustomerBasketDto), StatusCodes.Status200OK, "application/json")]
         [ProducesResponseType(typeof(BadRequestObjectResult), StatusCodes.Status400BadRequest, "application/json")]
-        public async Task<ActionResult<CustomerBasketDto>> UpdateBasketAsync(UpdateBasketRequest request)
+        public async Task<ActionResult<CustomerBasketDto?>> UpdateBasketAsync(UpdateBasketRequest request)
         {
             if (request.Items is null || !request.Items.Any())
             {
@@ -63,9 +69,11 @@ namespace Bff.Web.Controllers
                 }
             }
 
+            basket.Items.RemoveAll(i => !itemsCalculated.ToList().Exists(item => i.Id == item.Id));
+
             await this.basketService.UpdateAsync(basket);
 
-            return basket;
+            return await this.basketService.GetByIdAsync(basket.BuyerId);
         }
 
         [HttpPut("items")]
