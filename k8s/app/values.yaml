@@ -1,0 +1,22 @@
+app:
+  name: app
+  group: app
+  replicaCount: 1
+  container:
+    image: add-image-here
+    port: 8080
+    config: []
+    env:
+      - name: name
+        value: value
+  ports:
+    - name: default
+      protocol: protocol
+      port: 8080
+      targetPort: 8080
+
+  cluster:
+    name: cluster-name
+    type: type
+
+  

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.sqlserver.cluster.name }}
+spec:
+  type: {{ .Values.sqlserver.cluster.type }}
+  selector:
+    app: {{ .Values.sqlserver.cluster.name }}
+    group: {{ .Values.sqlserver.group }}
+  ports:
+  - name: {{ .Values.sqlserver.name }}
+    protocol: {{ .Values.sqlserver.protocol }}
+    port: {{ .Values.sqlserver.port }}
+    targetPort: {{ .Values.sqlserver.port }}
