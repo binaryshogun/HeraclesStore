@@ -1,0 +1,15 @@
+sqlserver:
+  config:
+    data:
+      - name: MSSQL_PID
+        value: "Express"
+      - name: ACCEPT_EULA
+        value: "Y"
+      # Password secret should be added by the command below:
+      # "kubectl create secret generic sqlserver --from-literal=SA_PASSWORD='Str0ngPassword!'"
+      - name: MSSQL_SA_PASSWORD
+        value: 
+          valueFrom:
+            secretKeyRef:
+              name: sqlserver
+              key: SA_PASSWORD

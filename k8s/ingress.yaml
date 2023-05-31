@@ -1,0 +1,16 @@
+ingress:
+  # spec:
+  #   template:
+  #     spec:
+  #       hostNetwork: true
+  ingressClassName: nginx
+  hosts:
+    - host: heracles-store-worker
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:  
+            service:
+              name: influxdb-clusterip
+              port: 
+                number: 8086

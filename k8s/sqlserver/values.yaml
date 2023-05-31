@@ -1,0 +1,38 @@
+replicaCount: 1
+sqlserver:
+  name: sqlserver
+  group: db
+  protocol: TCP
+  port: 1443
+
+  container:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    pullPolicy: IfNotPresent
+
+  cluster:
+    name: sqlserver-clusterip
+    type: ClusterIP
+
+  balancer:
+    name: sqlserver-loadbalancer
+    type: LoadBalancer
+
+  nodeport:
+    name: sqlserver-nodeport
+    type: NodePort
+
+  volume:
+    name: sqlserver-storage
+    kind: PersistentVolumeClaim
+    mountPath: /var/opt/mssql/data
+    pvc:
+      name: sqlserver-claim
+      mode: Filesystem
+      accessMode: ReadWriteMany
+      storage: 20Gi
+
+  config:
+    name: sqlserver-config
+    data:
+      - name: name
+        value: value
