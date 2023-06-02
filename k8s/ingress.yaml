@@ -1,12 +1,15 @@
 ingress:
-  # spec:
-  #   template:
-  #     spec:
-  #       hostNetwork: true
   ingressClassName: nginx
   hosts:
     - host: heracles-store-worker
       paths:
+        - path: /sqlserver
+          pathType: Exact
+          backend:  
+            service:
+              name: sqlserver-clusterip
+              port: 
+                number: 1443
         - path: /
           pathType: Prefix
           backend:  
