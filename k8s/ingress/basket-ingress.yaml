@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-resource
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - heracles-store.com
+    secretName: heracles-store-tls
+  rules:
+    - host: heracles-store.com
+      http:
+        paths:
+          - path: "/api/auth"
+            pathType: Prefix
+            backend: 
+              service: 
+                name: identity-api-clusterip
+                port:
+                  number: 5010
+          - path: "/api/catalog"
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-api-clusterip
+                port:
+                  number: 5012
+          - path: "/api/basket/"
+            pathType: Prefix
+            backend:
+              service:
+                name: basket-api-clusterip
+                port:
+                  number: 80
+          - path: "/api/orders/"
+            pathType: Prefix
+            backend:
+              service:
+                name: ordering-api-clusterip
+                port:
+                  number: 80

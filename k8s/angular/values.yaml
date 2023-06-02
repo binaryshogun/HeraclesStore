@@ -1,0 +1,21 @@
+replicaCount: 1
+angular:
+  name: client-angular
+  group: frontend
+
+  container:
+    image: alexanderkarpovich/heracles-store-client-angular
+    port: 80
+
+  cluster:
+    name: client-angular-clusterip
+    protocol: TCP
+    port: 80
+
+  volume:
+    name: angular-storage
+    mountPath: usr/share/nginx/html/assets/app.config.json
+    subPath: app.config.json
+    accessMode: ReadOnlyMany
+    configMap: angular-config
+  

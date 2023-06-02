@@ -1,0 +1,62 @@
+app:
+  name: catalog-api
+
+  container:
+    image: alexanderkarpovich/heracles-store-catalog
+    ports:
+      - name: http
+        number: 5012
+      - name: grpc
+        number: 5001
+    env:
+      - name: SQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: sqlserver
+            key: SA_PASSWORD
+      - name: ConnectionStrings__CatalogDatabase
+        value: "Server=sqlserver-clusterip,1433;Initial Catalog=catalogdb;User ID=sa;TrustServerCertificate=True;Password=$(SQL_PASSWORD);"
+      - name: ConnectionStrings__EventBus
+        value: "rabbitmq-clusterip"
+      - name: JWT__Issuer
+        value: "http://identity-api-clusterip:5010/"
+      - name: JWT__SecurityKey
+        valueFrom:
+          secretKeyRef:
+            name: identity
+            key: jwt_key
+      - name: NETWORK__HTTP_PORT
+        value: 5012
+      - name: NETWORK__GRPC_PORT
+        value: 5001
+      - name: EventBus__UserName
+        value: "user"
+      - name: EventBus__Password
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: DEFAULT_PASS
+      - name: EventBus__SubscriptionClientName
+        value: "Catalog"
+      - name: PictureBaseUrl
+        value: https://heracles-store.com/api/catalog/items/{catalogItemId}/picture
+
+
+  cluster:
+    name: catalog-api-clusterip
+    ports:
+      - name: catalog-http
+        protocol: TCP
+        port: 5012
+        targetPort: 5012
+      - name: catalog-grpc
+        protocol: TCP
+        port: 5001
+        targetPort: 5001
+
+  volume:
+    name: catalog-storage
+    mountPath: app/Pictures
+    subPath: Pictures
+    accessMode: ReadOnlyMany
+    configMap: catalog-config

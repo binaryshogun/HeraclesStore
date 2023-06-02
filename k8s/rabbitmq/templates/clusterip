@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.rabbitmq.cluster.name }}
+spec:
+  selector:
+    app: {{ .Values.rabbitmq.name }}
+    group: {{ .Values.rabbitmq.group }}
+  ports:
+  {{- range .Values.rabbitmq.cluster.ports }}
+    - name: {{ .name }}
+      protocol: {{ .protocol }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+  {{- end }}
