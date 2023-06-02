@@ -20,9 +20,18 @@ spec:
           imagePullPolicy: {{ .Values.sqlserver.container.pullPolicy }}
           ports:
             - containerPort: {{ .Values.sqlserver.port }}
-          envFrom:
-            - configMapRef:
-                name: {{ .Values.sqlserver.config.name }}
+          env:
+          {{- range .Values.sqlserver.container.env }}
+            - name: {{ .name }}
+            {{- if (.value | quote) }}
+              value: {{ .value | quote }}
+            {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+            {{- end }}
+          {{- end }}
           volumeMounts:
             - mountPath: {{ .Values.sqlserver.volume.mountPath }}
               name: {{ .Values.sqlserver.volume.name }}

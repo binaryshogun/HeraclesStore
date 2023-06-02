@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: frontend-resource
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - heracles-store.com
+    secretName: heracles-store-tls
+  rules:
+    - host: heracles-store.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend: 
+              service: 
+                name: client-angular-clusterip
+                port:
+                  number: 80

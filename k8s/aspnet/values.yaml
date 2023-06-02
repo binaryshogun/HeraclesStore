@@ -1,0 +1,24 @@
+replicaCount: 1
+app:
+  name: aspnet-service
+  group: backend
+  container:
+    image: add-image-here
+    ports: 
+      - name: default
+        number: 8080
+    env:
+      - name: name
+        value: ""
+        valueFrom: nil
+
+  cluster:
+    name: cluster-name
+    ports:
+      - name: default
+        protocol: protocol
+        port: 8080
+        targetPort: 8080
+     
+
+  

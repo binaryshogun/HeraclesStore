@@ -1,0 +1,7 @@
+{
+  "identityUrl": "https://heracles-store.com",
+  "catalogUrl": "http://catalog-api-clusterip:5012",
+  "purchaseUrl": "http://bff-web-clusterip:7000",
+  "signalrUrl": "http://ordering-api-clusterip:5016",
+  "basketUrl": "http://basket-api-clusterip:5014"
+}

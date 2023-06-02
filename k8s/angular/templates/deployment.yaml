@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.angular.name }}
+  labels:
+    app: {{ .Values.angular.name }}
+    group: {{ .Values.angular.group }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.angular.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.angular.name }}
+        group: {{ .Values.angular.group }}
+    spec:
+      volumes:
+        - name: {{ .Values.angular.volume.name }}
+          configMap:
+            name: {{ .Values.angular.volume.configMap }}
+      containers:
+        - name: {{ .Values.angular.name }}
+          image: {{ .Values.angular.container.image }} 
+          volumeMounts:
+            - name: {{ .Values.angular.volume.name }}
+              mountPath: {{ .Values.angular.volume.mountPath | quote }}
+              subPath: {{ .Values.angular.volume.subPath | quote }}
+          ports:
+            - containerPort: {{ .Values.angular.container.port }}

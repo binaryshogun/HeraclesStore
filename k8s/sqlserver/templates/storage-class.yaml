@@ -1,0 +1,6 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ .Values.sqlserver.volume.storageClass.name }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: {{ .Values.sqlserver.volume.storageClass.mode }}

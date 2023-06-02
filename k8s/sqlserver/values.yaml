@@ -3,36 +3,37 @@ sqlserver:
   name: sqlserver
   group: db
   protocol: TCP
-  port: 1443
+  port: 1433
 
   container:
     image: mcr.microsoft.com/mssql/server:2019-latest
     pullPolicy: IfNotPresent
+    env:
+      - name: MSSQL_PID
+        value: "Express"
+      - name: ACCEPT_EULA
+        value: "Y"
+      # Password secret should be added by the command below:
+      # "kubectl create secret generic sqlserver --from-literal=SA_PASSWORD='Str0ngPassword!'"
+      - name: MSSQL_SA_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: sqlserver
+            key: SA_PASSWORD
 
   cluster:
     name: sqlserver-clusterip
-    type: ClusterIP
-
-  balancer:
-    name: sqlserver-loadbalancer
-    type: LoadBalancer
-
-  nodeport:
-    name: sqlserver-nodeport
-    type: NodePort
 
   volume:
     name: sqlserver-storage
-    kind: PersistentVolumeClaim
     mountPath: /var/opt/mssql/data
+    accessMode: ReadWriteOnce
+    storage: 20Gi
+    storageClass:
+      kind: StorageClass
+      name: default
+      mode: WaitForFirstConsumer
+    pv:
+      name: sqlserver-pv
     pvc:
       name: sqlserver-claim
-      mode: Filesystem
-      accessMode: ReadWriteMany
-      storage: 20Gi
-
-  config:
-    name: sqlserver-config
-    data:
-      - name: name
-        value: value
