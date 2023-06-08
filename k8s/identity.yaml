@@ -15,8 +15,8 @@ app:
       - name: ConnectionStrings__IdentityConnection
         value: "Server=sqlserver-clusterip,1433;Initial Catalog=identitydb;User ID=sa;TrustServerCertificate=True;Password=$(SQL_PASSWORD);"
       - name: JWT__Issuer
-        value: "http://identity-api-clusterip/"
-      - name: JWT_SecurityKey
+        value: "http://identity-api-clusterip:5010/"
+      - name: JWT__SecurityKey
         valueFrom:
           secretKeyRef:
             name: identity

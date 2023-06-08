@@ -2,7 +2,7 @@ namespace Bff.Web.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("gw/[controller]")]
     public class BasketController : ControllerBase
     {
         private readonly ICatalogService catalogService;
