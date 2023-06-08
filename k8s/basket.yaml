@@ -1,0 +1,47 @@
+app:
+  name: basket-api
+
+  container:
+    image: alexanderkarpovich/heracles-store-basket
+    ports:
+      - name: http
+        number: 5014
+      - name: grpc
+        number: 5002
+    env:
+      - name: ConnectionStrings__Redis
+        value: "redis-clusterip"
+      - name: ConnectionStrings__EventBus
+        value: "rabbitmq-clusterip"
+      - name: JWT__Issuer
+        value: "http://identity-api-clusterip:5010/"
+      - name: JWT__SecurityKey
+        valueFrom:
+          secretKeyRef:
+            name: identity
+            key: jwt_key
+      - name: NETWORK__HTTP_PORT
+        value: 5014
+      - name: NETWORK__GRPC_PORT
+        value: 5002
+      - name: EventBus__UserName
+        value: "user"
+      - name: EventBus__Password
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: DEFAULT_PASS
+      - name: EventBus__SubscriptionClientName
+        value: "Basket"
+
+  cluster:
+    name: basket-api-clusterip
+    ports:
+      - name: basket-http
+        protocol: TCP
+        port: 5014
+        targetPort: 5014
+      - name: basket-grpc
+        protocol: TCP
+        port: 5002
+        targetPort: 5002

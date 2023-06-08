@@ -1,0 +1,52 @@
+app:
+  name: ordering-api
+
+  container:
+    image: alexanderkarpovich/heracles-store-ordering
+    ports:
+      - name: http
+        number: 5016
+      - name: grpc
+        number: 5003
+    env:
+      - name: SQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: sqlserver
+            key: SA_PASSWORD
+      - name: ConnectionStrings__OrderingDatabase
+        value: "Server=sqlserver-clusterip,1433;Initial Catalog=orderingdb;User ID=sa;TrustServerCertificate=True;Password=$(SQL_PASSWORD);"
+      - name: ConnectionStrings__EventBus
+        value: "rabbitmq-clusterip"
+      - name: JWT__Issuer
+        value: "http://identity-api-clusterip:5010/"
+      - name: JWT__SecurityKey
+        valueFrom:
+          secretKeyRef:
+            name: identity
+            key: jwt_key
+      - name: NETWORK__HTTP_PORT
+        value: 5016
+      - name: NETWORK__GRPC_PORT
+        value: 5003
+      - name: EventBus__UserName
+        value: "user"
+      - name: EventBus__Password
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: DEFAULT_PASS
+      - name: EventBus__SubscriptionClientName
+        value: "Ordering"
+
+  cluster:
+    name: ordering-api-clusterip
+    ports:
+      - name: ordering-http
+        protocol: TCP
+        port: 5016
+        targetPort: 5016
+      - name: ordering-grpc
+        protocol: TCP
+        port: 5003
+        targetPort: 5003

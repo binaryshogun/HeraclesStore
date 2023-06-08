@@ -19,3 +19,38 @@ spec:
                 name: identity-api-clusterip
                 port:
                   number: 5010
+          - path: "/api/catalog"
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-api-clusterip
+                port:
+                  number: 5012
+          - path: "/api/basket"
+            pathType: Prefix
+            backend:
+              service:
+                name: basket-api-clusterip
+                port:
+                  number: 5014
+          - path: "/api/orders"
+            pathType: Prefix
+            backend:
+              service:
+                name: ordering-api-clusterip
+                port:
+                  number: 5016
+          - path: "/gw/basket"
+            pathType: Prefix
+            backend:
+              service:
+                name: bff-web-clusterip
+                port:
+                  number: 7000
+          - path: "/gw/orders"
+            pathType: Prefix
+            backend:
+              service:
+                name: bff-web-clusterip
+                port:
+                  number: 7000
