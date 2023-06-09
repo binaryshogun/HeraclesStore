@@ -26,6 +26,8 @@ builder.WebHost.UseKestrel(options =>
     });
 });
 
+builder.Configuration.AddEnvironmentVariables();
+
 // Configuring Serilog logger
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()

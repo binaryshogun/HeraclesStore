@@ -1,0 +1,48 @@
+app:
+  name: bff-web
+
+  container:
+    image: alexanderkarpovich/heracles-store-bff-web
+    ports:
+      - name: http
+        number: 7000
+      - name: grpc
+        number: 7010
+    env:
+      - name: JWT__Issuer
+        value: "http://identity-api-clusterip:5010/"
+      - name: JWT__SecurityKey
+        valueFrom:
+          secretKeyRef:
+            name: identity
+            key: jwt_key
+      - name: NETWORK__HTTP_PORT
+        value: 7000
+      - name: NETWORK__GRPC_PORT
+        value: 7010
+      - name: Urls__Identity
+        value: "http://identity-api-clusterip:5010"
+      - name: Urls__Catalog
+        value: "http://catalog-api-clusterip:5012"
+      - name: Urls__Basket
+        value: "http://basket-api-clusterip:5014"
+      - name: Urls__Ordering
+        value: "http://ordering-api-clusterip:5016"
+      - name: Urls__GrpcCatalog
+        value: "http://catalog-api-clusterip:5001"
+      - name: Urls__GrpcBasket
+        value: "http://basket-api-clusterip:5002"
+      - name: Urls__GrpcOrdering
+        value: "http://ordering-api-clusterip:5003"
+
+  cluster:
+    name: bff-web-clusterip
+    ports:
+      - name: bff-web-http
+        protocol: TCP
+        port: 7000
+        targetPort: 7000
+      - name: bff-web-grpc
+        protocol: TCP
+        port: 7010
+        targetPort: 7010

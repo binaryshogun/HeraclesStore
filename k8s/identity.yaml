@@ -1,0 +1,33 @@
+app:
+  name: identity-api
+
+  container:
+    image: alexanderkarpovich/heracles-store-identity
+    ports:
+      - name: http
+        number: 5010
+    env:
+      - name: SQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: sqlserver
+            key: SA_PASSWORD
+      - name: ConnectionStrings__IdentityConnection
+        value: "Server=sqlserver-clusterip,1433;Initial Catalog=identitydb;User ID=sa;TrustServerCertificate=True;Password=$(SQL_PASSWORD);"
+      - name: JWT__Issuer
+        value: "http://identity-api-clusterip:5010/"
+      - name: JWT__SecurityKey
+        valueFrom:
+          secretKeyRef:
+            name: identity
+            key: jwt_key
+      - name: ASPNETCORE_URLS
+        value: "http://*:5010"
+
+  cluster:
+    name: identity-api-clusterip
+    ports:
+      - name: default
+        protocol: TCP
+        port: 5010
+        targetPort: 5010

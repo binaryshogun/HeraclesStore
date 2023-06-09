@@ -1,0 +1,35 @@
+replicaCount: 1
+rabbitmq:
+  name: rabbitmq
+  group: messaging
+
+  container:
+    image: rabbitmq:3-management
+    pullPolicy: IfNotPresent
+    ports: 
+      - port: 5672
+      - port: 15672
+    env:
+      - name: RABBITMQ_DEFAULT_USER
+        value: user
+      # Password secret should be added by the command below:
+      # "kubectl create secret generic rabbitmq --from-literal=DEFAULT_PASS='MyPassw0rd!'"
+      - name: RABBITMQ_DEFAULT_PASS
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: DEFAULT_PASS
+
+  cluster:
+    name: rabbitmq-clusterip
+    ports:
+      - name: service
+        protocol: TCP
+        port: 5672
+        targetPort: 5672
+      - name: management
+        protocol: TCP
+        port: 15672
+        targetPort: 15672
+        
+        

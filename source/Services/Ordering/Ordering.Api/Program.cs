@@ -112,6 +112,7 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions()
 app.MapHub<NotificationsHub>("/hub/notifications");
 
 await OrderingContextSeed.SeedAsync(app);
+IntegrationEventLogContextSeed.MigrateContext(app);
 EventBusConfiguratior.ConfigureEventBus(app);
 
 app.Run();

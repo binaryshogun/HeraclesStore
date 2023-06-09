@@ -1,0 +1,13 @@
+replicaCount: 1
+redis:
+  name: redis
+  group: db
+  protocol: TCP
+  port: 6379
+
+  container:
+    image: redis:latest
+    pullPolicy: IfNotPresent
+
+  cluster:
+    name: redis-clusterip

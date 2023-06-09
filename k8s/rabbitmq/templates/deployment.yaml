@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rabbitmq.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.rabbitmq.name }}
+      group: {{ .Values.rabbitmq.group }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.rabbitmq.name }}
+        group: {{ .Values.rabbitmq.group }}
+    spec:
+      containers:
+        - name: {{ .Values.rabbitmq.name }}
+          image: {{ .Values.rabbitmq.container.image }}
+          imagePullPolicy: {{ .Values.rabbitmq.container.pullPolicy }}
+          ports:
+          {{- range .Values.rabbitmq.container.ports }}
+            - containerPort: {{ .port }}
+          {{- end }}
+          env:
+          {{- range .Values.rabbitmq.container.env }}
+            - name: {{ .name | quote }}
+            {{- if ne .value nil }}
+              value: {{ .value | quote }}
+            {{- else if ne .valueFrom nil }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name | quote }}
+                  key: {{ .valueFrom.secretKeyRef.key | quote }}
+            {{- end }}
+          {{- end }}

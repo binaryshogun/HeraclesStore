@@ -110,6 +110,7 @@ app.MapHealthChecks("/liveness", new HealthCheckOptions()
 });
 
 await SeedData.EnsurePopulated(app);
+IntegrationEventLogContextSeed.MigrateContext(app);
 EventBusConfigurator.ConfigureEventBus(app);
 
 app.Run();

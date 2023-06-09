@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.sqlserver.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.sqlserver.name }}
+      group: {{ .Values.sqlserver.group }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.sqlserver.name }}
+        group: {{ .Values.sqlserver.group }}
+    spec:
+      containers:
+        - name: {{ .Values.sqlserver.name }}
+          image: {{ .Values.sqlserver.container.image }}
+          imagePullPolicy: {{ .Values.sqlserver.container.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.sqlserver.port }}
+          env:
+          {{- range .Values.sqlserver.container.env }}
+            - name: {{ .name }}
+            {{- if (.value | quote) }}
+              value: {{ .value | quote }}
+            {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: {{ .Values.sqlserver.volume.mountPath }}
+              name: {{ .Values.sqlserver.volume.name }}
+      volumes:
+        - name: {{ .Values.sqlserver.volume.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.sqlserver.volume.pvc.name }}
