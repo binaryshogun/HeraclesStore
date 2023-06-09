@@ -16,12 +16,10 @@ spec:
         app: {{ .Values.app.name }}
         group: {{ .Values.app.group }}
     spec:
-      {{- if .Values.app.volume }}
-        volumes:
+    {{- if (.Values.app.volume | quote) }}
+      volumes:
         - name: {{ .Values.app.volume.name }}
-          configMap:
-            name: {{ .Values.app.volume.configMap }}
-      {{- end }}
+    {{- end }}
       containers:
         - name: {{ .Values.app.name }}
           image: {{ .Values.app.container.image }}  
@@ -31,9 +29,8 @@ spec:
           {{- end }}
         {{- if .Values.app.volume }}
           volumeMounts:
-            - name: {{ .Values.angular.volume.name }}
-              mountPath: {{ .Values.angular.volume.mountPath | quote }}
-              subPath: {{ .Values.angular.volume.subPath | quote }}
+            - name: {{ .Values.app.volume.name }}
+              mountPath: {{ .Values.app.volume.mountPath | quote }}
         {{- end }}
           env:
           {{- range .Values.app.container.env}}

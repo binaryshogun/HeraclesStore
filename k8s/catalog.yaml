@@ -41,7 +41,6 @@ app:
       - name: PictureBaseUrl
         value: https://heracles-store.com/api/catalog/items/{catalogItemId}/picture
 
-
   cluster:
     name: catalog-api-clusterip
     ports:
@@ -56,7 +55,10 @@ app:
 
   volume:
     name: catalog-storage
-    mountPath: app/Pictures
-    subPath: Pictures
-    accessMode: ReadOnlyMany
-    configMap: catalog-config
+    mountPath: /app/Pictures
+    storage: 10Gi
+    className: manual
+    path: /home/alexander/workspace/Pictures
+    accessMode: ReadWriteOnce
+    policy: Retain
+    node: heracles-store

@@ -78,7 +78,7 @@ export class BasketService {
 
   setBasket(basket: IBasket): Observable<boolean> {
     console.log(basket);
-    let url = this.purchaseUrl + '/api/basket/update';
+    let url = this.purchaseUrl + '/gw/basket/update';
 
     this.basket = basket;
 
@@ -98,7 +98,7 @@ export class BasketService {
   }
 
   getBasket(): Observable<IBasket> {
-    let url = this.purchaseUrl + '/api/basket/' + this.authService.UserData?.userId;
+    let url = this.purchaseUrl + '/gw/basket/' + this.authService.UserData?.userId;
     return this.service.get(url).pipe<IBasket>(tap((response: any) => {
       if (response.status === 204) {
         return null;

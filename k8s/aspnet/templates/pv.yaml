@@ -1,0 +1,24 @@
+{{ if .Values.app.volume }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.app.volume.name }}
+spec:
+  capacity:
+    storage: {{ .Values.app.volume.storage }}
+  volumeMode: Filesystem
+  accessModes:
+    - {{ .Values.app.volume.accessMode }}
+  persistentVolumeReclaimPolicy: {{ .Values.app.volume.policy }}
+  storageClassName: {{ .Values.app.volume.className }}
+  local:
+    path: {{ .Values.app.volume.path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ .Values.app.volume.node }}
+{{ end }}
